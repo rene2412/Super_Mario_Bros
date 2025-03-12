@@ -6,16 +6,23 @@ using namespace std;
 
 
 int main() {
-   InitWindow(800, 600, "Raylib Test");
+  const int screenWidth = 1000;
+  const int screenHeight = 600;
+       
+  InitWindow(screenWidth, screenHeight, "Raylib Test");
+  SetTargetFPS(60);
 
-   Mario mario;
-   MapAssets map;
+  Mario mario;
+  MapAssets map;
    while (!WindowShouldClose()) {
-        BeginDrawing();
+        mario.Camera();
+        mario.Movement();
+	BeginDrawing();
         ClearBackground(BLUE);
+	BeginMode2D(mario.GetCamera());
 	map.Draw(); //draw brick
 	mario.Draw(); //DrawMario
-        mario.MoveLeft();
+	EndMode2D();
 	EndDrawing();
     }
  
