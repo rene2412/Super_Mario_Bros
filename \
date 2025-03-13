@@ -1,0 +1,62 @@
+#include "mario.h"
+
+Mario::Mario() {
+    // Load Mario's sprite
+    img = LoadImage("images/mario64.png");
+    ImageResize(&img, img.width / 24, img.height / 24);
+    sprite = LoadTextureFromImage(img);
+    UnloadImage(img);
+
+    Position.x = 50;
+    Position.y = 415;
+    speed = 5;
+
+    // Camera setup
+    camera.target = Position;
+    camera.offset = { 400, 480 }; // Keep Mario centered
+    camera.rotation = 0.0f;
+    camera.zoom = 0.7f; // Wider zoom for aesthetics
+}
+
+Mario::~Mario() {
+    UnloadTexture(sprite);
+}
+
+Camera2D& Mario::GetCamera() {
+    return camera;
+}
+
+void Mario::Draw() {
+    DrawTexture(sprite, Position.x, Position.y, WHITE);
+}
+
+void Mario::Movement() {
+    if (IsKeyDown(KEY_LEFT)) {
+        if (Position.x <= 0) Position.x = 0;
+        else Position.x -= speed;
+    }
+    if (IsKeyDown(KEY_RIGHT)) {
+        Position.x += speed;
+    }
+    //need to add air physics
+    if (IsKeyDown(KEY_SPACE)) {
+        std::cout << "Jumping here soon????" << std::endl;
+    	Position.y -= speed;
+    }
+}
+
+void Mario::Camera() {
+    // Smoothly update camera position
+    camera.target.x += (Position.x - camera.target.x) * 0.1f;
+    camera.target.y += (Position.y - camera.target.y) * 0.1f;
+
+    // Prevent camera from going left past 575
+    if (camera.target.x <= 575) {
+        camera.target.x = 575;
+    }
+}
+
+void Mario::GravityPhysics() {
+
+
+}

@@ -9,13 +9,13 @@ int main() {
   const int screenWidth = 1000;
   const int screenHeight = 600;
        
-  InitWindow(screenWidth, screenHeight, "Raylib Test");
+  InitWindow(screenWidth, screenHeight, "Super Mario Bros");
   SetTargetFPS(60);
-
+  SetTraceLogLevel(LOG_WARNING);
   Mario mario;
   MapAssets map;
    while (!WindowShouldClose()) {
-        mario.Camera();
+	mario.Camera();
         mario.Movement();
 	BeginDrawing();
         ClearBackground(BLUE);

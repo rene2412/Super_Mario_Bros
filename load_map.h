@@ -21,7 +21,7 @@ void Draw() {
      Texture2D brick = Brick();
         for (int cols = 0; cols < 3; cols++) {
             y -= brick.height; // Move up for each row
-            for (int rows = 0; rows < 24; rows++) {
+            for (int rows = 0; rows < 50; rows++) {
                 DrawTexture(brick, x, y, WHITE);
                 x += brick.width; // Move right for each row
             }
