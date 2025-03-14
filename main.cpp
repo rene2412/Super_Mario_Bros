@@ -19,10 +19,12 @@ int main() {
         mario.Movement();
 	BeginDrawing();
         ClearBackground(BLUE);
+	BeginBlendMode(BLEND_ALPHA);
 	BeginMode2D(mario.GetCamera());
 	map.Draw(); //draw brick
 	mario.Draw(); //DrawMario
 	EndMode2D();
+	EndBlendMode();
 	EndDrawing();
     }
  
