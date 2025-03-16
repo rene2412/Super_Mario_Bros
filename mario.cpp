@@ -1,4 +1,5 @@
 #include "mario.h"
+#include "enemies.h"
 #include <cmath>
 
 Mario::Mario() {
@@ -40,6 +41,7 @@ Mario::Mario() {
     speed = 5.0f;
     jump = 8.0f;
     IsJumping = false;
+    hitbox = { Position.x, Position.y, 50, 66 };
     override_jump_animation = false;
     override_left_animation = false;
     override_right_animation = false;
@@ -100,6 +102,9 @@ void Mario::Draw() {
 }
 
 void Mario::Movement() {
+   hitbox.x = Position.x;
+   hitbox.y = Position.y;
+
    if (IsKeyDown(KEY_LEFT)) {
 	SetForwardVector({-1, 0}); //set forward to -1
         if (Position.x <= 0) Position.x = 0;
@@ -130,6 +135,7 @@ void Mario::Movement() {
     	Jumping();
     }
 }
+
 
 void Mario::Camera() {
     // Smoothly update camera position
@@ -162,3 +168,6 @@ void Mario::Jumping() {
    }
    
 }
+
+
+

@@ -22,7 +22,6 @@ private:
     int frameCounter = 0 ;
     const int switchRate = 5; 
 
-
 public:
     Mario();
     ~Mario();
@@ -30,10 +29,12 @@ public:
     Camera2D& GetCamera();
     Vector2 GetForwardVector() { return Forward; }
     const float GetGravity() const { return gravity; }
-    
-    void SetForwardVector(Vector2 newForward) { Forward = newForward; }
+    Rectangle GetHitBox() const { return hitbox; }
 
-    void tick();
+    void SetForwardVector(Vector2 newForward) { Forward = newForward; }
+    
+    void Update();
+    void Combat();
     void Draw();
     void Movement();
     void Camera();
