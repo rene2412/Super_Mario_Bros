@@ -1,4 +1,5 @@
 #include "load_map.h"
+#include <iostream>
 
 // Constructor: Loads textures once
 MapAssets::MapAssets() {
@@ -21,6 +22,19 @@ MapAssets::MapAssets() {
     ImageResize(&img4, img4.width / 24 , img4.height / 24);
     hardbrick = LoadTextureFromImage(img4);
     UnloadImage(img4);
+
+    Image img5 = LoadImage("images/cloud.png");
+   ImageFormat(&img5, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8); 
+    std::cout << "Image format: " << img5.format << std::endl;
+    ImageResize(&img5, img5.width / 6, img5.height / 6);
+    cloud = LoadTextureFromImage(img5);
+    UnloadImage(img5);
+
+
+    Image img6 = LoadImage("images/tube.png");
+    ImageResize(&img6, img6.width / 4 , img5.height + 50 );
+    tube = LoadTextureFromImage(img6);
+    UnloadImage(img6);
 }
 
 // Destructor: Unloads textures when the object is destroyed
@@ -43,16 +57,25 @@ void MapAssets::Draw() {
     }
 
     DrawTexture(hill, 230, 402, WHITE);
+    
+    DrawTexture(question, 330, 250, WHITE);
     int posX = 580;
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 3; i++) {
     	DrawTexture(question, posX, 250, WHITE);
     	posX += 100;
     }
+    DrawTexture(question, 630, 100, WHITE);
+    
     posX = 530;
     for (int i = 0; i < 3; i++) {  
    	 DrawTexture(hardbrick, posX, 250, WHITE);
 	 posX += 100;
     }
+
+   	 DrawTexture(cloud, 200, 0, WHITE);
+   	 DrawTexture(tube, 900, 351, WHITE);
+
+
 }
 
 // Unload textures when no longer needed
@@ -61,5 +84,7 @@ void MapAssets::UnloadTextures() {
     UnloadTexture(hill);
     UnloadTexture(question);
     UnloadTexture(hardbrick);
+    UnloadTexture(cloud);
+    UnloadTexture(tube);
 }
 

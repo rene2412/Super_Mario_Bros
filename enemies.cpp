@@ -14,7 +14,7 @@ UnloadImage(img2);
 
 Position.x = 500;
 Position.y = 446;
-speed = 3.0f;
+speed = 1.0f;
 
 HitBox = { Position.x, Position.y, 55, 40 };
 }
@@ -28,14 +28,16 @@ void Goomba::Draw() {
 	DrawTexture(sprite, Position.x, Position.y, WHITE);
 }
 
-void Goomba::Movement() {
-	Position.x -= GetSpeed();
-	HitBox.x = Position.x;
-        HitBox.y = Position.y;
+void Goomba::Movement(Mario &mario) {
+	float distance = Position.x - mario.GetPosition().x;
+		if (distance <= 250) {
+	        Position.x -= GetSpeed();
+		HitBox.x = Position.x;
+       		HitBox.y = Position.y;
+	}
 }
 
-
-void Goomba::Update() {
+void Goomba::Update(Mario &mario) {
 	Draw();
-	Movement();
+	Movement(mario);
 }

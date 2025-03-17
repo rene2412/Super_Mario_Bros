@@ -28,7 +28,7 @@ int main() {
 	BeginMode2D(mario.GetCamera());
 	map.Draw(); //draw brick
 	mario.Draw(); //DrawMario
-	goomba.Update();
+	goomba.Update(mario);
 	EndMode2D();
 	EndBlendMode();
 	EndDrawing();

@@ -10,10 +10,7 @@ public:
     void Draw();  // Draw the map assets
 
 private:
-    Texture2D brick;
-    Texture2D hill;
-    Texture2D question;
-    Texture2D hardbrick;
+    Texture2D brick, hill, question, tube, hardbrick, cloud;
 
     void LoadTextures();   // Load textures once
     void UnloadTextures(); // Unload textures when done

@@ -1,5 +1,6 @@
 #pragma once
 #include "raylib.h"
+#include "mario.h"
 
 class Enemies {
     protected:
@@ -29,7 +30,7 @@ class Goomba : public Enemies {
 	 Goomba();
 	 ~Goomba();
 
-	 void Draw() override;
-	 void Update() override;
-	 void Movement() override;
+	 void Draw();
+	 void Update(Mario &mario);
+	 void Movement(Mario &mario);
 }; 

@@ -28,6 +28,7 @@ public:
 
     Camera2D& GetCamera();
     Vector2 GetForwardVector() { return Forward; }
+    Vector2 GetPosition () { return Position; }
     const float GetGravity() const { return gravity; }
     Rectangle GetHitBox() const { return hitbox; }
 
