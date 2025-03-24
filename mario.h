@@ -21,7 +21,6 @@ private:
     float start_timer;
     int frameCounter = 0 ;
     const int switchRate = 5; 
-
 public:
     Mario();
     ~Mario();
@@ -32,6 +31,7 @@ public:
     const float GetGravity() const { return gravity; }
     Rectangle GetHitBox() const { return hitbox; }
 
+    void SetPosition(Vector2 newPosition)  { Position = newPosition; }    
     void SetForwardVector(Vector2 newForward) { Forward = newForward; }
     
     void Update();
@@ -40,5 +40,6 @@ public:
     void Movement();
     void Camera();
     void Jumping();
+    
 };
 

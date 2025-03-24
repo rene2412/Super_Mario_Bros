@@ -1,5 +1,6 @@
 #include "mario.h"
 #include "enemies.h"
+#include "load_map.h"
 #include <cmath>
 
 Mario::Mario() {
@@ -63,6 +64,13 @@ Mario::~Mario() {
 
 Camera2D& Mario::GetCamera() {
     return camera;
+}
+
+void Mario::Update() {
+	Draw();
+	Movement();
+	Jumping();
+	Camera();
 }
 
 
@@ -165,9 +173,10 @@ void Mario::Jumping() {
         Position.y = 415;
         override_jump_animation = false; 
 	IsJumping = false; // Allow jumping again
-   }
-   
+   }   
 }
+
+
 
 
 

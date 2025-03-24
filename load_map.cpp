@@ -1,4 +1,5 @@
 #include "load_map.h"
+#include "mario.h"
 #include <iostream>
 
 // Constructor: Loads textures once
@@ -24,17 +25,24 @@ MapAssets::MapAssets() {
     UnloadImage(img4);
 
     Image img5 = LoadImage("images/cloud.png");
-   ImageFormat(&img5, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8); 
+    ImageFormat(&img5, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8); 
     std::cout << "Image format: " << img5.format << std::endl;
     ImageResize(&img5, img5.width / 6, img5.height / 6);
     cloud = LoadTextureFromImage(img5);
     UnloadImage(img5);
 
-
     Image img6 = LoadImage("images/tube.png");
-    ImageResize(&img6, img6.width / 4 , img5.height + 50 );
+    ImageResize(&img6, img6.width / 4 , img6.height / 2);
+    hitbox_tube = {900, 351, float(img6.width), float(img6.height) }; //this code is from the future spookyyyyyyyy
     tube = LoadTextureFromImage(img6);
     UnloadImage(img6);
+
+    Image img7 = LoadImage("images/mushroom.png");
+    ImageResize(&img7, img7.width / 4 , img7.height / 2);
+    hitbox_tube = {900, 351, float(img7.width), float(img7.height) }; //this code is from the future spookyyyyyyyy
+    mushroom = LoadTextureFromImage(img7);
+    UnloadImage(img7);
+
 }
 
 // Destructor: Unloads textures when the object is destroyed
@@ -72,8 +80,9 @@ void MapAssets::Draw() {
 	 posX += 100;
     }
 
-   	 DrawTexture(cloud, 200, 0, WHITE);
+   //	 DrawTexture(cloud, 200, 0, WHITE);
    	 DrawTexture(tube, 900, 351, WHITE);
+   //	 DrawTexture(mushroom, 240, 370, WHITE);
 
 
 }
