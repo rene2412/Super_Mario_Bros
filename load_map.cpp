@@ -1,5 +1,7 @@
 #include "load_map.h"
 #include "mario.h"
+#include <cstdlib>
+#include <ctime>
 #include <iostream>
 
 // Constructor: Loads textures once
@@ -27,7 +29,7 @@ MapAssets::MapAssets() {
     Image img5 = LoadImage("images/cloud.png");
     ImageFormat(&img5, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8); 
     std::cout << "Image format: " << img5.format << std::endl;
-    ImageResize(&img5, img5.width / 6, img5.height / 6);
+    ImageResize(&img5, img5.width / 3, img5.height / 3);
     cloud = LoadTextureFromImage(img5);
     UnloadImage(img5);
 
@@ -38,10 +40,17 @@ MapAssets::MapAssets() {
     UnloadImage(img6);
 
     Image img7 = LoadImage("images/mushroom.png");
-    ImageResize(&img7, img7.width / 4 , img7.height / 2);
-    hitbox_tube = {900, 351, float(img7.width), float(img7.height) }; //this code is from the future spookyyyyyyyy
+    ImageResize(&img7, img7.width / 7, img7.height / 6);
+    hitbox_mushroom = {240, 250, float(img7.width), float(img7.height) }; //this code is from the future spookyyyyyyyy
     mushroom = LoadTextureFromImage(img7);
     UnloadImage(img7);
+   
+    Image img8 = LoadImage("images/stairs.png");
+    ImageResize(&img8, img8.width / 7, img8.height / 6);
+    hitbox_stairs = {900, 351, float(img8.width), float(img8.height) }; //this code is from the future spookyyyyyyyy
+    stairs = LoadTextureFromImage(img8);
+    UnloadImage(img8);
+
 
 }
 
@@ -79,11 +88,14 @@ void MapAssets::Draw() {
    	 DrawTexture(hardbrick, posX, 250, WHITE);
 	 posX += 100;
     }
-
-   //	 DrawTexture(cloud, 200, 0, WHITE);
+    	posX = 200;
+    for (int i = 0; i < 23; i++) {
+   	 DrawTexture(cloud, posX, -60, WHITE);
+    	 posX += 250;
+    }
    	 DrawTexture(tube, 900, 351, WHITE);
-   //	 DrawTexture(mushroom, 240, 370, WHITE);
-
+   	 DrawTexture(mushroom, 240, 250, WHITE);
+	 DrawTexture(stairs, 1300, 420, WHITE);
 
 }
 
@@ -95,5 +107,6 @@ void MapAssets::UnloadTextures() {
     UnloadTexture(hardbrick);
     UnloadTexture(cloud);
     UnloadTexture(tube);
+    UnloadTexture(stairs);
 }
 

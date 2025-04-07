@@ -42,6 +42,9 @@ Mario::Mario() {
     speed = 5.0f;
     jump = 8.0f;
     IsJumping = false;
+    IsFalling = false;
+    IsOnGround = true;
+    IsOnAsset = false;
     hitbox = { Position.x, Position.y, 50, 66 };
     override_jump_animation = false;
     override_left_animation = false;
@@ -51,6 +54,7 @@ Mario::Mario() {
     camera.offset = { 400, 480 }; // Keep Mario centered
     camera.rotation = 0.0f;
     camera.zoom = 0.7f; // Wider zoom for aesthetics
+    
 }
 
 Mario::~Mario() {
@@ -135,6 +139,7 @@ void Mario::Movement() {
     //need to add air physics
     if (IsKeyDown(KEY_SPACE) and !IsJumping) {
 	    IsJumping = true;
+	    IsFalling = false;
 	    override_left_animation = false;
 	    override_right_animation = false;
 	    start_timer = GetTime();
@@ -165,13 +170,15 @@ void Mario::Jumping() {
    }
    //now when mario reaches his peak he must come down
    //so when mario exceeds his air time, he must travel down 9.8f
-   else {	
+   else {
+    	IsFalling = true;	   
    	Position.y += GetGravity() * 0.55;
    }
    // Stop jumping when Mario reaches the ground (adjust Y value as needed)
    if (Position.y >= 415) {
         Position.y = 415;
         override_jump_animation = false; 
+	IsFalling = false;
 	IsJumping = false; // Allow jumping again
    }   
 }

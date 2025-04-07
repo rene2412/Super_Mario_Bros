@@ -19,7 +19,7 @@ int main() {
   Goomba goomba;
   MapAssets map;
    while (!WindowShouldClose()) {
-	BeginDrawing();
+ 	BeginDrawing();
         ClearBackground(BLUE);
 	BeginBlendMode(BLEND_ALPHA);
 	mario.Camera();
