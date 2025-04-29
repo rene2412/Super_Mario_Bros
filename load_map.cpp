@@ -35,7 +35,7 @@ MapAssets::MapAssets() {
 
     Image img6 = LoadImage("images/tube.png");
     ImageResize(&img6, img6.width / 4 , img6.height / 2);
-    hitbox_tube = {900, 351, float(img6.width), float(img6.height) }; //this code is from the future spookyyyyyyyy
+    hitbox_tube = {1100, 283, float(img6.width), float(img6.height) }; //this code is from the future spookyyyyyyyy
     tube = LoadTextureFromImage(img6);
     UnloadImage(img6);
 
@@ -50,6 +50,12 @@ MapAssets::MapAssets() {
     hitbox_stairs = {900, 351, float(img8.width), float(img8.height) }; //this code is from the future spookyyyyyyyy
     stairs = LoadTextureFromImage(img8);
     UnloadImage(img8);
+
+    Image img9 = LoadImage("images/tube.png");
+    ImageResize(&img9, img9.width / 4 , img9.height / 2);
+    hitbox_tube2 = {1500, 283, float(img9.width), float(img9.height) }; //this code is from the future spookyyyyyyyy
+    tube2 = LoadTextureFromImage(img9);
+    UnloadImage(img9);
 
 
 }
@@ -66,7 +72,7 @@ void MapAssets::Draw() {
 
     for (int cols = 0; cols < 3; cols++) {
         y -= brick.height; // Move up for each row
-        for (int rows = 0; rows < 50; rows++) {
+        for (int rows = 0; rows < 85; rows++) {
             DrawTexture(brick, x, y, WHITE);
             x += brick.width; // Move right for each row
         }
@@ -93,9 +99,10 @@ void MapAssets::Draw() {
    	 DrawTexture(cloud, posX, -60, WHITE);
     	 posX += 250;
     }
-   	 DrawTexture(tube, 900, 351, WHITE);
+   	 DrawTexture(tube, 1100, 283, WHITE);
    	 DrawTexture(mushroom, 240, 250, WHITE);
-	 DrawTexture(stairs, 1300, 420, WHITE);
+	 DrawTexture(stairs, 1300, 351, WHITE);
+   	 DrawTexture(tube2, 1500, 283, WHITE);
 
 }
 
@@ -107,6 +114,7 @@ void MapAssets::UnloadTextures() {
     UnloadTexture(hardbrick);
     UnloadTexture(cloud);
     UnloadTexture(tube);
+    UnloadTexture(tube2);
     UnloadTexture(stairs);
 }
 

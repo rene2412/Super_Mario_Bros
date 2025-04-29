@@ -8,5 +8,7 @@ class Game {
 public:
     Game();
     void Collisions(Mario &mario, Goomba &goomba, MapAssets &map);
+    void HandleGoombaCollision(Mario &mario, Goomba &goomba);
+    void HandleTubeCollision(Mario &mario, Rectangle tubeHitbox, float padding); 
 };
 
