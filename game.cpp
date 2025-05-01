@@ -6,7 +6,8 @@ Game::Game() {}
 
 void Game::Collisions(Mario &mario, Goomba &goomba, MapAssets &map) {
     HandleGoombaCollision(mario, goomba);
-    
+    bool collision = CheckCollisionRecs(mario.GetHitBox(), map.GetTube());
+	std::cout <<  "Collision Status: " << collision << std::endl;
     
 // Handle each tube with its own landing height offset
     if (CheckCollisionRecs(mario.GetHitBox(), map.GetTube())) {
@@ -27,6 +28,10 @@ void Game::Collisions(Mario &mario, Goomba &goomba, MapAssets &map) {
         HandleTubeCollision(mario, map.GetTube4(), 7);
     }
     */
+
+    if (CheckCollisionRecs(mario.GetHitBox(), map.GetTube()) == false and mario.GetIsOnAsset() == true)  {
+    	FallFromAsset(mario);
+    }
 }
 
 void Game::HandleGoombaCollision(Mario &mario, Goomba &goomba) {
@@ -40,7 +45,6 @@ void Game::HandleTubeCollision(Mario &mario, Rectangle tubeHitbox, float padding
     Rectangle marioHitbox = mario.GetHitBox();
 
     //DrawRectangleLines(tubeHitbox.x, tubeHitbox.y, tubeHitbox.width, tubeHitbox.height, BLUE);
-
     if (CheckCollisionRecs(marioHitbox, tubeHitbox) && mario.GetForwardVector().x == 1 &&
         !mario.GetIsJumping() && mario.GetIsOnGround()) {
         std::cout << "Run L (Tube1)\n";
@@ -59,17 +63,28 @@ void Game::HandleTubeCollision(Mario &mario, Rectangle tubeHitbox, float padding
         mario.SetIsOnGround(false);
         mario.SetIsJumping(false);
         mario.SetOverrideJumpAnimation(false);
-        mario.SetPosition({mario.GetPosition().x, tubeHitbox.y + padding});
+        mario.SetPosition({mario.GetPosition().x, tubeHitbox.y});
         std::cout << "Mario landed on tube 1\n";
-    }
+  	  }
+}
 
-    if (!CheckCollisionRecs(marioHitbox, tubeHitbox) && mario.GetIsOnAsset()) {
+void Game::FallFromAsset(Mario &mario) {
+    Vector2 pos = mario.GetPosition();
+    if (mario.GetIsOnAsset()) {
         std::cout << "1!\n";
+	pos.y += mario.GetGravity() * 0.35f;
         mario.SetIsFalling(true);
-        mario.SetIsJumping(false);
-        mario.SetIsOnAsset(false);
-        mario.SetIsOnGround(true);
-    }
+        mario.SetIsJumping(true);
+	mario.SetPosition(pos);
+       if (mario.GetPosition().y >= 415) {	
+       	        mario.SetPosition({mario.GetPosition().x, 415});	
+	        mario.SetIsOnAsset(false);
+        	mario.SetIsOnGround(true);
+    		mario.SetIsFalling(false);
+		mario.SetIsJumping(false); 
+					   
+       		}	
+	}
 }
 
 

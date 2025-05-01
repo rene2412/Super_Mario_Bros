@@ -52,8 +52,8 @@ MapAssets::MapAssets() {
     UnloadImage(img8);
 
     Image img9 = LoadImage("images/tube.png");
-    ImageResize(&img9, img9.width / 4 , img9.height / 2);
-    hitbox_tube2 = {1500, 283, float(img9.width), float(img9.height) }; //this code is from the future spookyyyyyyyy
+    ImageResize(&img9, img9.width / 4 , img9.height - 100);
+    hitbox_tube2 = {1500, 218, float(img9.width), float(img9.height) }; //this code is from the future spookyyyyyyyy
     tube2 = LoadTextureFromImage(img9);
     UnloadImage(img9);
 
@@ -102,7 +102,7 @@ void MapAssets::Draw() {
    	 DrawTexture(tube, 1100, 283, WHITE);
    	 DrawTexture(mushroom, 240, 250, WHITE);
 	 DrawTexture(stairs, 1300, 351, WHITE);
-   	 DrawTexture(tube2, 1500, 283, WHITE);
+   	 DrawTexture(tube2, 1500, 218, WHITE);
 
 }
 
