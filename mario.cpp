@@ -40,7 +40,7 @@ Mario::Mario() {
     Position.x = 50;
     Position.y = 415;
     speed = 5.0f;
-    jump = 8.0f;
+    jump = 10.0f;
     IsJumping = false;
     IsFalling = false;
     IsOnGround = true;

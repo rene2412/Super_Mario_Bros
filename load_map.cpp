@@ -41,7 +41,7 @@ MapAssets::MapAssets() {
 
     Image img7 = LoadImage("images/mushroom.png");
     ImageResize(&img7, img7.width / 7, img7.height / 6);
-    hitbox_mushroom = {240, 250, float(img7.width), float(img7.height) }; //this code is from the future spookyyyyyyyy
+    hitbox_mushroom = {240, 240, float(img7.width), float(img7.height) }; //this code is from the future spookyyyyyyyy
     mushroom = LoadTextureFromImage(img7);
     UnloadImage(img7);
    
@@ -52,12 +52,18 @@ MapAssets::MapAssets() {
     UnloadImage(img8);
 
     Image img9 = LoadImage("images/tube.png");
-    ImageResize(&img9, img9.width / 4 , img9.height - 100);
-    hitbox_tube2 = {1500, 218, float(img9.width), float(img9.height) }; //this code is from the future spookyyyyyyyy
+    ImageResize(&img9, img9.width / 4, img9.height - 100);
+    hitbox_tube2 = {1515, 220, float((img9.width /  4) + 40) , float(img9.height - 100) }; //this code is from the future spookyyyyyyyy
     tube2 = LoadTextureFromImage(img9);
     UnloadImage(img9);
 
-
+    //load in the collision hit boxed for the bricks 
+    int posX = 530;
+    for (int i = 0; i < 3; i++) {  
+	 AddHardBrick(posX, 250, hardbrick.width, hardbrick.height); 
+	 posX += 100;
+    }
+    
 }
 
 // Destructor: Unloads textures when the object is destroyed
@@ -102,7 +108,7 @@ void MapAssets::Draw() {
    	 DrawTexture(tube, 1100, 283, WHITE);
    	 DrawTexture(mushroom, 240, 250, WHITE);
 	 DrawTexture(stairs, 1300, 351, WHITE);
-   	 DrawTexture(tube2, 1500, 218, WHITE);
+   	 DrawTexture(tube2, 1500, 180, WHITE);
 
 }
 

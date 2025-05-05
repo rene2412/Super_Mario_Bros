@@ -3,41 +3,60 @@
 
 Game::Game() {}
   
-
 void Game::Collisions(Mario &mario, Goomba &goomba, MapAssets &map) {
     HandleGoombaCollision(mario, goomba);
-    bool collision = CheckCollisionRecs(mario.GetHitBox(), map.GetTube());
-	std::cout <<  "Collision Status: " << collision << std::endl;
     
-// Handle each tube with its own landing height offset
+    // Store current state before checking collisions
+    bool wasOnAsset = mario.GetIsOnAsset();
+    bool onAnyAsset = false;
+    
+    // Check collision with tube 1
     if (CheckCollisionRecs(mario.GetHitBox(), map.GetTube())) {
         HandleTubeCollision(mario, map.GetTube(), 3);
-        std::cout << "Collision with Tube1\n";
+        onAnyAsset = true;
     }
-
+    
+    // Check collision with tube 2
     if (CheckCollisionRecs(mario.GetHitBox(), map.GetTube2())) {
-        HandleTubeCollision(mario, map.GetTube2(), 6);
-        std::cout << "Collision with Tube2\n";
+        HandleTubeCollision(mario, map.GetTube2(), 3);
+        onAnyAsset = true;
     }
-/*
+    
+    //these dont exist yet
+    /*
     if (CheckCollisionRecs(mario.GetHitBox(), map.GetTube3())) {
         HandleTubeCollision(mario, map.GetTube3(), 4);
+        onAnyAsset = true;
     }
 
     if (CheckCollisionRecs(mario.GetHitBox(), map.GetTube4())) {
         HandleTubeCollision(mario, map.GetTube4(), 7);
+        onAnyAsset = true;
     }
     */
 
-    if (CheckCollisionRecs(mario.GetHitBox(), map.GetTube()) == false and mario.GetIsOnAsset() == true)  {
-    	FallFromAsset(mario);
+    // If Mario was on an asset but now isn't on any asset, handle falling
+    if (wasOnAsset && !onAnyAsset) {
+        FallFromAsset(mario);
     }
+
+	HandleBrickCollision(mario, map);	
 }
+
+
+void Game::HandleBrickCollision(Mario &mario, MapAssets &map) {
+	for (auto &brick : map.GetHardBrick()) {
+		if (CheckCollisionRecs(mario.GetHitBox(), brick)) { 
+			std::cout << "Brick!\n";
+		}
+	}
+}
+
+
 
 void Game::HandleGoombaCollision(Mario &mario, Goomba &goomba) {
     if (CheckCollisionRecs(mario.GetHitBox(), goomba.GetHitBox())) {
         std::cout << "Collision with Goomba\n";
-    
     }
 }
 
@@ -47,25 +66,25 @@ void Game::HandleTubeCollision(Mario &mario, Rectangle tubeHitbox, float padding
     //DrawRectangleLines(tubeHitbox.x, tubeHitbox.y, tubeHitbox.width, tubeHitbox.height, BLUE);
     if (CheckCollisionRecs(marioHitbox, tubeHitbox) && mario.GetForwardVector().x == 1 &&
         !mario.GetIsJumping() && mario.GetIsOnGround()) {
-        std::cout << "Run L (Tube1)\n";
+        std::cout << "Run L (Tube)\n";
         mario.SetPosition({mario.GetPosition().x - 5, mario.GetPosition().y});
     }
 
     if (CheckCollisionRecs(marioHitbox, tubeHitbox) && mario.GetForwardVector().x == -1 &&
         !mario.GetIsJumping() && mario.GetIsOnGround()) {
-        std::cout << "Run R (Tube1)\n";
+        std::cout << "Run R (Tube)\n";
         mario.SetPosition({mario.GetPosition().x + 5, mario.GetPosition().y});
     }
 
-    if ((marioHitbox.y - 6 >= tubeHitbox.y) && mario.GetIsFalling() &&
+    if ((marioHitbox.y - 3 >= tubeHitbox.y) && mario.GetIsFalling() &&
         CheckCollisionRecs(marioHitbox, tubeHitbox)) {
         mario.SetIsOnAsset(true);
         mario.SetIsOnGround(false);
         mario.SetIsJumping(false);
         mario.SetOverrideJumpAnimation(false);
+        std::cout << "Mario landed on tube\n";
         mario.SetPosition({mario.GetPosition().x, tubeHitbox.y});
-        std::cout << "Mario landed on tube 1\n";
-  	  }
+   }
 }
 
 void Game::FallFromAsset(Mario &mario) {
@@ -82,9 +101,6 @@ void Game::FallFromAsset(Mario &mario) {
         	mario.SetIsOnGround(true);
     		mario.SetIsFalling(false);
 		mario.SetIsJumping(false); 
-					   
        		}	
 	}
 }
-
-
