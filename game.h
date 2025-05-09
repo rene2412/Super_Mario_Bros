@@ -12,5 +12,6 @@ public:
     void HandleTubeCollision(Mario &mario, Rectangle tubeHitbox, float padding); 
     void FallFromAsset(Mario &mario);
     void HandleBrickCollision(Mario &mario, MapAssets &map);
+    void HandleQuestionCollision(Mario &mario, MapAssets &map);
 };
 

@@ -40,18 +40,30 @@ void Game::Collisions(Mario &mario, Goomba &goomba, MapAssets &map) {
         FallFromAsset(mario);
     }
 
-	HandleBrickCollision(mario, map);	
+  HandleBrickCollision(mario, map);	
+  HandleQuestionCollision(mario, map);
+
 }
 
+
+void Game::HandleQuestionCollision(Mario &mario, MapAssets &map) {
+	for(auto &brick : map.GetQuestionBrick()) {
+		if (CheckCollisionRecs(mario.GetHitBox(), brick)) {
+			mario.SetIsOnAsset(true);
+			FallFromAsset(mario);
+		}
+	}
+}
 
 void Game::HandleBrickCollision(Mario &mario, MapAssets &map) {
 	for (auto &brick : map.GetHardBrick()) {
 		if (CheckCollisionRecs(mario.GetHitBox(), brick)) { 
 			std::cout << "Brick!\n";
-		}
-	}
-}
-
+			mario.SetIsOnAsset(true);
+			FallFromAsset(mario);
+			}
+        	  }
+  	  }
 
 
 void Game::HandleGoombaCollision(Mario &mario, Goomba &goomba) {
@@ -64,14 +76,15 @@ void Game::HandleTubeCollision(Mario &mario, Rectangle tubeHitbox, float padding
     Rectangle marioHitbox = mario.GetHitBox();
 
     //DrawRectangleLines(tubeHitbox.x, tubeHitbox.y, tubeHitbox.width, tubeHitbox.height, BLUE);
-    if (CheckCollisionRecs(marioHitbox, tubeHitbox) && mario.GetForwardVector().x == 1 &&
-        !mario.GetIsJumping() && mario.GetIsOnGround()) {
+    if (CheckCollisionRecs(marioHitbox, tubeHitbox) && mario.GetForwardVector().x == 1 && 
+	 mario.GetIsOnGround()) {
+    
         std::cout << "Run L (Tube)\n";
         mario.SetPosition({mario.GetPosition().x - 5, mario.GetPosition().y});
     }
 
     if (CheckCollisionRecs(marioHitbox, tubeHitbox) && mario.GetForwardVector().x == -1 &&
-        !mario.GetIsJumping() && mario.GetIsOnGround()) {
+         mario.GetIsOnGround()) {
         std::cout << "Run R (Tube)\n";
         mario.SetPosition({mario.GetPosition().x + 5, mario.GetPosition().y});
     }
@@ -101,6 +114,7 @@ void Game::FallFromAsset(Mario &mario) {
         	mario.SetIsOnGround(true);
     		mario.SetIsFalling(false);
 		mario.SetIsJumping(false); 
+        	mario.SetOverrideJumpAnimation(false);
        		}	
 	}
-}
+} 

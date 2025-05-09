@@ -34,7 +34,7 @@ MapAssets::MapAssets() {
     UnloadImage(img5);
 
     Image img6 = LoadImage("images/tube.png");
-    ImageResize(&img6, img6.width / 4 , img6.height / 2);
+    ImageResize(&img6, img6.width / 3 , img6.height / 2);
     hitbox_tube = {1100, 283, float(img6.width), float(img6.height) }; //this code is from the future spookyyyyyyyy
     tube = LoadTextureFromImage(img6);
     UnloadImage(img6);
@@ -47,15 +47,21 @@ MapAssets::MapAssets() {
    
     Image img8 = LoadImage("images/stairs.png");
     ImageResize(&img8, img8.width / 7, img8.height / 6);
-    hitbox_stairs = {900, 351, float(img8.width), float(img8.height) }; //this code is from the future spookyyyyyyyy
     stairs = LoadTextureFromImage(img8);
     UnloadImage(img8);
 
     Image img9 = LoadImage("images/tube.png");
-    ImageResize(&img9, img9.width / 4, img9.height - 100);
+    ImageResize(&img9, img9.width / 3, img9.height - 100);
     hitbox_tube2 = {1515, 220, float((img9.width /  4) + 40) , float(img9.height - 100) }; //this code is from the future spookyyyyyyyy
     tube2 = LoadTextureFromImage(img9);
     UnloadImage(img9);
+
+    Image img10 = LoadImage("images/coin.png");
+    ImageResize(&img10, img10.width / 10, img10.height / 10);
+    coin = LoadTextureFromImage(img10);
+    UnloadImage(img10);
+
+
 
     //load in the collision hit boxed for the bricks 
     int posX = 530;
@@ -64,6 +70,14 @@ MapAssets::MapAssets() {
 	 posX += 100;
     }
     
+    AddQuestionBrick(330, 250, question.width, question.height);
+    posX = 580;
+    for (int i = 0; i < 3; i++) {
+    	AddQuestionBrick(posX, 250, question.width, question.height); 
+	 posX += 100;
+    }
+    AddQuestionBrick(630, 100, question.width, question.height); 
+
 }
 
 // Destructor: Unloads textures when the object is destroyed
@@ -109,7 +123,11 @@ void MapAssets::Draw() {
    	 DrawTexture(mushroom, 240, 250, WHITE);
 	 DrawTexture(stairs, 1300, 351, WHITE);
    	 DrawTexture(tube2, 1500, 180, WHITE);
+	 DrawTexture(coin, 200, 210, WHITE);
+//	 CoinAnimation();
+}
 
+void MapAssets::CoinAnimation() {
 }
 
 // Unload textures when no longer needed
@@ -122,5 +140,6 @@ void MapAssets::UnloadTextures() {
     UnloadTexture(tube);
     UnloadTexture(tube2);
     UnloadTexture(stairs);
+    UnloadTexture(coin);
 }
 
