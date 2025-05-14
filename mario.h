@@ -21,6 +21,7 @@ private:
     bool override_right_animation;
     bool IsOnGround;
     bool IsOnAsset;
+    bool IsOnStairs;
     float start_timer;
     int frameCounter = 0 ;
     const int switchRate = 5; 
@@ -38,7 +39,9 @@ public:
     bool GetOverrideJumpAnimation() const { return override_jump_animation; }
     bool GetIsOnGround() const { return IsOnGround; }
     bool GetIsOnAsset() const { return IsOnAsset; }
+    bool GetIsOnStairs() const { return IsOnStairs; }
     
+
     void SetPosition(Vector2 newPosition)  { Position = newPosition; }    
     void SetForwardVector(Vector2 newForward) { Forward = newForward; }
     void SetIsJumping(bool j) { IsJumping = j; }
@@ -46,6 +49,7 @@ public:
     void SetIsOnGround(bool ground)  { IsOnGround = ground; }
     void SetIsFalling(bool f) { IsFalling = f; }
     void SetIsOnAsset(bool a) { IsOnAsset = a; }
+    void SetIsOnStairs(bool s) { IsOnStairs = s; }
 
     void Update();
     void Combat();

@@ -35,7 +35,7 @@ MapAssets::MapAssets() {
 
     Image img6 = LoadImage("images/tube.png");
     ImageResize(&img6, img6.width / 3 , img6.height / 2);
-    hitbox_tube = {1100, 283, float(img6.width), float(img6.height) }; //this code is from the future spookyyyyyyyy
+    hitbox_tube = {1100, 293, float(img6.width), float(img6.height) }; //this code is from the future spookyyyyyyyy
     tube = LoadTextureFromImage(img6);
     UnloadImage(img6);
 
@@ -46,7 +46,7 @@ MapAssets::MapAssets() {
     UnloadImage(img7);
    
     Image img8 = LoadImage("images/stairs.png");
-    ImageResize(&img8, img8.width / 7, img8.height / 6);
+    ImageResize(&img8, img8.width / 5, img8.height / 5);
     stairs = LoadTextureFromImage(img8);
     UnloadImage(img8);
 
@@ -60,7 +60,6 @@ MapAssets::MapAssets() {
     ImageResize(&img10, img10.width / 10, img10.height / 10);
     coin = LoadTextureFromImage(img10);
     UnloadImage(img10);
-
 
 
     //load in the collision hit boxed for the bricks 
@@ -78,6 +77,19 @@ MapAssets::MapAssets() {
     }
     AddQuestionBrick(630, 100, question.width, question.height); 
 
+   float width = stairs.width;
+   float height = stairs.height;
+   float startingX = 260;
+   float startingY = 452;
+
+   for (int row = 0; row < 4; row++) {
+	      int x = startingX + (width * row);
+	      int y = startingY - (height * row); 
+	  for (int col = 0; col < 4 - row; col++) {
+		    AddStairs(x, y, width, height);
+		    x += width;
+	  	}
+	}
 }
 
 // Destructor: Unloads textures when the object is destroyed
@@ -121,14 +133,32 @@ void MapAssets::Draw() {
     }
    	 DrawTexture(tube, 1100, 283, WHITE);
    	 DrawTexture(mushroom, 240, 250, WHITE);
-	 DrawTexture(stairs, 1300, 351, WHITE);
    	 DrawTexture(tube2, 1500, 180, WHITE);
 	 DrawTexture(coin, 200, 210, WHITE);
 //	 CoinAnimation();
+	 DrawStairs();
 }
 
 void MapAssets::CoinAnimation() {
+
 }
+
+void MapAssets::DrawStairs() {
+   float width = stairs.width;
+   float height = stairs.height;
+   float startingX = 260;
+   float startingY = 452;
+
+   for (int row = 0; row < 4; row++) {
+	      int x = startingX + (width * row);
+	      int y = startingY - (height * row); 
+	  for (int col = 0; col < 4 - row; col++) {
+		   DrawTexture(stairs, x, y, WHITE);
+		   x += width;
+	  	}
+	}
+}
+
 
 // Unload textures when no longer needed
 void MapAssets::UnloadTextures() {

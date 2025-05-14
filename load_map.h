@@ -12,14 +12,14 @@ private:
     std::vector<Rectangle> hitbox_hardbricks;
     std::vector<Rectangle> question_bricks;
     std::vector<Rectangle> hitbox_stairs;
-
 public:
     MapAssets();  // Constructor to initialize textures
     ~MapAssets(); // Destructor to unload textures
 
     void Draw();  // Draw the map assets
     void CoinAnimation();
-    
+    void DrawStairs();     
+   
     Rectangle GetTube() const { return hitbox_tube; }
     Rectangle GetTube2() const { return hitbox_tube2; }
     Rectangle GetTube3() const { return hitbox_tube3; }
@@ -31,7 +31,7 @@ public:
     
     void AddHardBrick(float posX, float posY, float width, float height) { hitbox_hardbricks.push_back({posX, posY, width, height}); }
     void AddQuestionBrick(float posX, float posY, float width, float height) { question_bricks.push_back({posX, posY, width, height}); }
-    
+    void AddStairs(float posX, float posY, float width, float height) { hitbox_stairs.push_back({posX, posY, width, height}); }
 
 
 

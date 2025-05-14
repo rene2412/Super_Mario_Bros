@@ -13,5 +13,6 @@ public:
     void FallFromAsset(Mario &mario);
     void HandleBrickCollision(Mario &mario, MapAssets &map);
     void HandleQuestionCollision(Mario &mario, MapAssets &map);
+    void HandleStairCollision(Mario &mario, MapAssets &map);
 };
 

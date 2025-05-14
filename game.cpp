@@ -1,5 +1,6 @@
 #include "game.h"
 #include <iostream>
+#include <cmath>
 
 Game::Game() {}
   
@@ -42,8 +43,33 @@ void Game::Collisions(Mario &mario, Goomba &goomba, MapAssets &map) {
 
   HandleBrickCollision(mario, map);	
   HandleQuestionCollision(mario, map);
-
+  HandleStairCollision(mario, map);
 }
+
+void Game::HandleStairCollision(Mario &mario, MapAssets &map) {
+	float stairSpeed = 5.0f;
+	float rads = 45.0f * (PI / 180.0f);
+	Vector2 anglePosition = mario.GetPosition();
+	for(auto &stair : map.GetStairs()) {
+    		//DrawRectangleLines(stair.x, stair.y, stair.width, stair.height, BLUE);
+		bool c = CheckCollisionRecs(mario.GetHitBox(), stair);
+		if (CheckCollisionRecs(mario.GetHitBox(), stair) and mario.GetForwardVector().x == 1) {
+			std::cout << "Collision: " << c << std::endl;
+			anglePosition.x -= stairSpeed * cos(rads);
+			anglePosition.y -= stairSpeed * sin(rads);
+		        mario.SetPosition(anglePosition);
+			mario.SetIsOnStairs(true);	
+		}
+		if (mario.GetIsOnStairs() and mario.GetForwardVector().x == -1) {
+			rads = 60.0f * (PI / 180.0f);
+			std::cout << "down\n";
+			anglePosition.x -=  0.2;
+			anglePosition.y += 0.2;
+		        mario.SetPosition(anglePosition);	
+		}
+	}
+}
+
 
 
 void Game::HandleQuestionCollision(Mario &mario, MapAssets &map) {
