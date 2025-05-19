@@ -35,6 +35,16 @@ Mario::Mario() {
     ImageResize(&left_img, 50, 66); // 50 width and 66 height are just the values from the base animation
     left_sprite = LoadTextureFromImage(left_img);
     UnloadImage(left_img);
+	
+    bigMario_img = LoadImage("images/BigMario.png");
+    ImageResize(&bigMario_img, 100, 120); // 50 width and 66 height are just the values from the base animation
+    bigMario_sprite = LoadTextureFromImage(bigMario_img);
+    UnloadImage(bigMario_img);
+    
+    bigMarioWalk_img = LoadImage("images/BigMarioWalk.png");
+    ImageResize(&bigMarioWalk_img, 100, 120); // 50 width and 66 height are just the values from the base animation
+    bigMarioWalk_sprite = LoadTextureFromImage(bigMarioWalk_img);
+    UnloadImage(bigMarioWalk_img);
 
     Forward = { 1, 0 };
     Position.x = 50;
@@ -64,6 +74,7 @@ Mario::~Mario() {
     UnloadTexture(right_sprite);
     UnloadTexture(left_idle_sprite);
     UnloadTexture(left_sprite);
+    UnloadTexture(bigMario_sprite);
 }
 
 Camera2D& Mario::GetCamera() {
@@ -79,6 +90,7 @@ void Mario::Update() {
 
 
 void Mario::Draw() {
+    //DrawTexture(bigMarioWalk_sprite, 100, 120, WHITE);
    if (override_jump_animation) { 
 	   if (GetForwardVector().x == 1 and GetForwardVector().y == 0) {
 	 	 DrawTexture(jump_sprite, Position.x, Position.y, WHITE);

@@ -5,8 +5,8 @@
 
 class Mario {
 private:
-    Image img, left_idle, jump_img, jump_img_left, right_img, left_img;
-    Texture2D sprite, left_idle_sprite, jump_sprite, jump_sprite_left, right_sprite, left_sprite;
+    Image img, left_idle, jump_img, jump_img_left, right_img, left_img, bigMario_img, bigMarioWalk_img;
+    Texture2D sprite, left_idle_sprite, jump_sprite, jump_sprite_left, right_sprite, left_sprite, bigMario_sprite, bigMarioWalk_sprite;
     Vector2 Position;
     Vector2 Forward;
     Rectangle hitbox;
@@ -50,6 +50,7 @@ public:
     void SetIsFalling(bool f) { IsFalling = f; }
     void SetIsOnAsset(bool a) { IsOnAsset = a; }
     void SetIsOnStairs(bool s) { IsOnStairs = s; }
+    void SetHitBox(Rectangle newHitBox) { hitbox = newHitBox; }
 
     void Update();
     void Combat();

@@ -47,62 +47,51 @@ void Game::Collisions(Mario &mario, Goomba &goomba, MapAssets &map) {
 }
 
 void Game::HandleStairCollision(Mario &mario, MapAssets &map) {
-	// for every stair check if mario is colliding with it
-	for (auto &stair : map.GetStairs()) {
-		if (CheckCollisionRecs(mario.GetHitBox(), stair) and mario.GetForwardVector().x == 1 and IsKeyDown(KEY_RIGHT)) {
-			// calculate the slope angle mario needs to travel at for upstairs and then downstairs
-			Vector2 anglePos = mario.GetPosition();
-			float rads = 140.0f * (PI / 180.0f);
-		       	anglePos.x += 1.85 * cos(rads);
-		       	anglePos.y -= 1.85 * sin(rads);
-			mario.SetPosition({anglePos.x, anglePos.y});
-			mario.SetIsOnStairs(true);
-		}	
-		if (mario.GetIsOnStairs() and mario.GetForwardVector().x == -1 and IsKeyDown(KEY_LEFT)) {
-			Vector2 anglePos = mario.GetPosition();
-			float rads = 80.0f * (PI / 180.0f);
-		       	anglePos.x -= 0.3 * cos(rads);
-		       	anglePos.y += 0.4 * sin(rads);
-			mario.SetPosition({anglePos.x, anglePos.y});
+	float stairSpeed = 5.0f;
+	float rads = 45.0f * (PI / 180.0f);
+	Vector2 anglePosition = mario.GetPosition();
+
+	for(auto &stair : map.GetStairs()) {
+    		//DrawRectangleLines(stair.x, stair.y, stair.width, stair.height, BLUE);
+		bool c = CheckCollisionRecs(mario.GetHitBox(), stair);
+		std::cout << "Mario Position: " << mario.GetPosition().x << ", " << mario.GetPosition().y << std::endl;
+		std::cout << "Mario Hit Position: " << mario.GetHitBox().x << ", " << mario.GetHitBox().y << std::endl;
+		std::cout << "Collision: " << c << std::endl;
+		std::cout << "Forward Vector: " << mario.GetForwardVector().x << std::endl;
+
+		if (CheckCollisionRecs(mario.GetHitBox(), stair) and mario.GetForwardVector().x == 1) {
+			std::cout << "up\n";
+			anglePosition.x -= stairSpeed * cos(rads);
+			anglePosition.y -= stairSpeed * sin(rads);
+		        mario.SetPosition(anglePosition);
+		//	mario.SetHitBox({mario.GetPosition().x, mario.GetPosition().y});	
+			//mario.SetIsOnStairs(true);
 		}
-		if (mario.GetIsOnStairs() and mario.GetPosition().y >= 415) {
-			mario.SetIsOnStairs(false);
+		if (CheckCollisionRecs(mario.GetHitBox(), stair) and mario.GetForwardVector().x == -1) {
+			rads = 75.0f * (PI / 180.0f);
+			std::cout << "down\n";
+			//anglePosition.x -= 0.2 * cos(rads);
+			//anglePosition.y += 0.2 * sin(rads);
+		        //mario.SetPosition(anglePosition);	
 		}
 	}
 }
 
+
+
 void Game::HandleQuestionCollision(Mario &mario, MapAssets &map) {
-	int i = 0;
 	for(auto &brick : map.GetQuestionBrick()) {
-		if (i != 1 and CheckCollisionRecs(mario.GetHitBox(), brick)) {
-			std::cout << "This is brick: " << i << std::endl; 
-		        std::cout << brick.x << ", " << brick.y << "\n"; 	
+		if (CheckCollisionRecs(mario.GetHitBox(), brick)) {
 			mario.SetIsOnAsset(true);
 			FallFromAsset(mario);
-			  // Center the coin above the brick
-	            	Vector2 newCoinPos;
-			newCoinPos.x = brick.x  + brick.width / 2 - map.GetCoin().width / 2;
-        		newCoinPos.y = brick.y - map.GetCoin().height;
-			map.SetCoinPos(newCoinPos);
-			map.SetShowCoin(true);
 		}
-		if (i == 1 and CheckCollisionRecs(mario.GetHitBox(), brick)) {
-			std::cout << "MUSHROOM TIME" << std::endl; 
-			mario.SetIsOnAsset(true);
-			FallFromAsset(mario);
-			Vector2 newMushroomPos;
-			newMushroomPos.x = brick.x  + brick.width / 2 - map.GetMushroom().width / 2;
-        		newMushroomPos.y = brick.y - map.GetMushroom().height;
-			map.SetMushroomPos(newMushroomPos);
-			map.SetMushroomCollided(true);
-		}
-			i++;
 	}
 }
 
 void Game::HandleBrickCollision(Mario &mario, MapAssets &map) {
 	for (auto &brick : map.GetHardBrick()) {
 		if (CheckCollisionRecs(mario.GetHitBox(), brick)) { 
+			std::cout << "Brick!\n";
 			mario.SetIsOnAsset(true);
 			FallFromAsset(mario);
 			}

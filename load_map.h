@@ -6,20 +6,53 @@ class MapAssets {
 private:
     Texture2D brick, hill, question, tube, tube2, tube3, tube4, hardbrick, cloud, mushroom, stairs, coin;
     Rectangle hitbox_tube, hitbox_tube2, hitbox_tube3, hitbox_tube4, hitbox_mushroom;
+    Vector2 CoinPos;
+    Vector2 MushroomPos;
+
     void LoadTextures();   // Load textures once
-    void UnloadTextures(); // Unload textures when done
+    void UnloadTextures(); // Unload textures when donere 
 
     std::vector<Rectangle> hitbox_hardbricks;
     std::vector<Rectangle> question_bricks;
     std::vector<Rectangle> hitbox_stairs;
-public:
-    MapAssets();  // Constructor to initialize textures
-    ~MapAssets(); // Destructor to unload textures
+    
 
-    void Draw();  // Draw the map assets
+    bool mushroomCollided = false;
+    bool showCoin = false;
+    float coinTimer = true; 
+
+public:
+    MapAssets();  
+    ~MapAssets(); 
+
+    void Draw();  
     void CoinAnimation();
     void DrawStairs();     
-   
+    void MushroomAnimation();    
+
+    bool GetMushroomCollided() const { return mushroomCollided; }
+    bool GetShowCoin() const { return showCoin; }
+    
+    void SetShowCoin(bool s) { showCoin = s; }
+    void SetMushroomCollided(bool m) { mushroomCollided = m; }		
+
+    
+    Texture2D GetCoin() const { return coin; } 
+    Vector2 GetCoinPos() const { return CoinPos; }
+    void SetCoinPos(Vector2 c) { 
+	    CoinPos = c;
+	    showCoin = false;
+	    coinTimer = 0.0f;	    
+    }
+    
+    Vector2 GetMushroomPos() const { return MushroomPos; }
+    void SetMushroomPos(Vector2 newMushroomPos) { MushroomPos = newMushroomPos; }
+
+    Rectangle GetMushroom() { 
+	     hitbox_mushroom.x = MushroomPos.x;
+             hitbox_mushroom.y = MushroomPos.y;
+	    return hitbox_mushroom; 
+    }
     Rectangle GetTube() const { return hitbox_tube; }
     Rectangle GetTube2() const { return hitbox_tube2; }
     Rectangle GetTube3() const { return hitbox_tube3; }

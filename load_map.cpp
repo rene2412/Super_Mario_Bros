@@ -41,7 +41,8 @@ MapAssets::MapAssets() {
 
     Image img7 = LoadImage("images/mushroom.png");
     ImageResize(&img7, img7.width / 7, img7.height / 6);
-    hitbox_mushroom = {240, 240, float(img7.width), float(img7.height) }; //this code is from the future spookyyyyyyyy
+    MushroomPos = {680, 250}; 
+    hitbox_mushroom = {MushroomPos.x, MushroomPos.y, float(img7.width), float(img7.height) }; //this code is from the future spookyyyyyyyy
     mushroom = LoadTextureFromImage(img7);
     UnloadImage(img7);
    
@@ -57,8 +58,9 @@ MapAssets::MapAssets() {
     UnloadImage(img9);
 
     Image img10 = LoadImage("images/coin.png");
-    ImageResize(&img10, img10.width / 10, img10.height / 10);
+    ImageResize(&img10, img10.width / 13, img10.height / 13);
     coin = LoadTextureFromImage(img10);
+    CoinPos = {330, 250};
     UnloadImage(img10);
 
 
@@ -79,7 +81,7 @@ MapAssets::MapAssets() {
 
    float width = stairs.width;
    float height = stairs.height;
-   float startingX = 260;
+   float startingX = 1160;
    float startingY = 452;
 
    for (int row = 0; row < 4; row++) {
@@ -112,8 +114,9 @@ void MapAssets::Draw() {
     }
 
     DrawTexture(hill, 230, 402, WHITE);
-    
+    //this is the first question block brick
     DrawTexture(question, 330, 250, WHITE);
+    
     int posX = 580;
     for (int i = 0; i < 3; i++) {
     	DrawTexture(question, posX, 250, WHITE);
@@ -132,21 +135,72 @@ void MapAssets::Draw() {
     	 posX += 250;
     }
    	 DrawTexture(tube, 1100, 283, WHITE);
-   	 DrawTexture(mushroom, 240, 250, WHITE);
    	 DrawTexture(tube2, 1500, 180, WHITE);
-	 DrawTexture(coin, 200, 210, WHITE);
-//	 CoinAnimation();
+	 if (showCoin) { 
+		CoinAnimation();
+	 }
 	 DrawStairs();
+	 if (GetMushroomCollided()) {
+		 MushroomAnimation();
+	 }
+}
+
+static bool beginning = true;
+static bool isOnBricks = false;
+void MapAssets::MushroomAnimation() {
+	  if (beginning) {
+		  MushroomPos.x += 2;
+	  }
+	  DrawTexture(mushroom, MushroomPos.x, MushroomPos.y, WHITE);
+	  for (auto &brick : GetHardBrick()) {
+		if (CheckCollisionRecs(GetMushroom(), brick)) {
+			std::cout << "here1\n";
+			isOnBricks = true;
+			break;	
+			}
+		}	
+	for (auto &qbrick : GetQuestionBrick()) {
+		if (CheckCollisionRecs(GetMushroom(), qbrick)) {
+			std::cout << "here2\n";
+			isOnBricks = true;
+			break;	
+		}
+	}
+	std::cout << MushroomPos.x << std::endl;
+	if (MushroomPos.x >= 815) {
+		isOnBricks = false;
+		MushroomPos.y += 3;
+		if (MushroomPos.y >= 440) {
+			MushroomPos.y = 440;
+		}
+	}
+	//when the mushroom hits the tube reverse its direction
+	if (CheckCollisionRecs(GetMushroom(), GetTube())) {
+			beginning = false;
+	      }
+	if (!beginning) {
+		MushroomPos.x -= 2.5;
+	}
+	std::cout << "lets see: " << isOnBricks << std::endl;
 }
 
 void MapAssets::CoinAnimation() {
-
+	 //std::cout << "Drawing coin at: " << CoinPos.x << ", " << CoinPos.y << "\n";
+	if (showCoin) {
+        CoinPos.y -= 6; 
+        DrawTexture(coin, CoinPos.x, CoinPos.y, WHITE);
+        coinTimer += GetFrameTime(); 
+          
+        if (coinTimer >= 0.35f) {
+            showCoin = false;   
+        }
+    }
 }
 
 void MapAssets::DrawStairs() {
    float width = stairs.width;
    float height = stairs.height;
-   float startingX = 260;
+   float startingX = 1160;
    float startingY = 452;
 
    for (int row = 0; row < 4; row++) {
