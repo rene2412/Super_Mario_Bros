@@ -5,7 +5,7 @@
 #include <iostream>
 
 // Constructor: Loads textures once
-MapAssets::MapAssets() {
+MapAssets::MapAssets() : removeQuestionBricks(4, true), hasQuestionPassed(4, false) {
     Image img = LoadImage("images/brick.png");
     ImageResize(&img, img.width / 10, img.height / 10);
     brick = LoadTextureFromImage(img);
@@ -35,7 +35,7 @@ MapAssets::MapAssets() {
 
     Image img6 = LoadImage("images/tube.png");
     ImageResize(&img6, img6.width / 3 , img6.height / 2);
-    hitbox_tube = {1100, 293, float(img6.width), float(img6.height) }; //this code is from the future spookyyyyyyyy
+    hitbox_tube = {880, 293, float(img6.width), float(img6.height) }; //this code is from the future spookyyyyyyyy
     tube = LoadTextureFromImage(img6);
     UnloadImage(img6);
 
@@ -60,10 +60,13 @@ MapAssets::MapAssets() {
     Image img10 = LoadImage("images/coin.png");
     ImageResize(&img10, img10.width / 13, img10.height / 13);
     coin = LoadTextureFromImage(img10);
-    CoinPos = {330, 250};
     UnloadImage(img10);
 
-
+    Image img11 = LoadImage("images/completedBrick.png");
+    ImageResize(&img11, img11.width / 2, img11.height / 2);
+    completedBrick = LoadTextureFromImage(img11);
+    UnloadImage(img11);
+    questionIndex = -1;
     //load in the collision hit boxed for the bricks 
     int posX = 530;
     for (int i = 0; i < 3; i++) {  
@@ -73,7 +76,7 @@ MapAssets::MapAssets() {
     
     AddQuestionBrick(330, 250, question.width, question.height);
     posX = 580;
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 2; i++) {
     	AddQuestionBrick(posX, 250, question.width, question.height); 
 	 posX += 100;
     }
@@ -92,6 +95,17 @@ MapAssets::MapAssets() {
 		    x += width;
 	  	}
 	}
+    hasQuestionPassed.resize(question_bricks.size(), false);
+    haveCoinsPassed.resize(3, false);
+
+    allCoinPositions = {
+    	{330, 250},
+	{680, 100},
+	{680, 250}
+    };
+
+    showCoin = {false, false, false};
+    coinTimer = {0.0f, 0.0f, 0.0f};
 }
 
 // Destructor: Unloads textures when the object is destroyed
@@ -115,15 +129,20 @@ void MapAssets::Draw() {
 
     DrawTexture(hill, 230, 402, WHITE);
     //this is the first question block brick
-    DrawTexture(question, 330, 250, WHITE);
-    
-    int posX = 580;
-    for (int i = 0; i < 3; i++) {
-    	DrawTexture(question, posX, 250, WHITE);
-    	posX += 100;
+    if(removeQuestionBricks[0] == true) {
+	    DrawTexture(question, 330, 250, WHITE);
     }
-    DrawTexture(question, 630, 100, WHITE);
+    int posX = 580;
+    for (int i = 1; i < 3; i++) {
+	if (removeQuestionBricks[i] == true) {
+    		DrawTexture(question, posX, 250, WHITE);
+	}
+		posX += 100;
+    }
     
+    if (removeQuestionBricks[3] == true) {
+   	 DrawTexture(question, 630, 100, WHITE);
+    } 
     posX = 530;
     for (int i = 0; i < 3; i++) {  
    	 DrawTexture(hardbrick, posX, 250, WHITE);
@@ -134,15 +153,14 @@ void MapAssets::Draw() {
    	 DrawTexture(cloud, posX, -60, WHITE);
     	 posX += 250;
     }
-   	 DrawTexture(tube, 1100, 283, WHITE);
+   	 DrawTexture(tube, 880, 283, WHITE);
    	 DrawTexture(tube2, 1500, 180, WHITE);
-	 if (showCoin) { 
-		CoinAnimation();
-	 }
+	 CoinAnimation();
 	 DrawStairs();
 	 if (GetMushroomCollided()) {
 		 MushroomAnimation();
 	 }
+	 CompletedBrick();
 }
 
 static bool beginning = true;
@@ -154,19 +172,16 @@ void MapAssets::MushroomAnimation() {
 	  DrawTexture(mushroom, MushroomPos.x, MushroomPos.y, WHITE);
 	  for (auto &brick : GetHardBrick()) {
 		if (CheckCollisionRecs(GetMushroom(), brick)) {
-			std::cout << "here1\n";
 			isOnBricks = true;
 			break;	
 			}
 		}	
 	for (auto &qbrick : GetQuestionBrick()) {
 		if (CheckCollisionRecs(GetMushroom(), qbrick)) {
-			std::cout << "here2\n";
 			isOnBricks = true;
 			break;	
 		}
 	}
-	std::cout << MushroomPos.x << std::endl;
 	if (MushroomPos.x >= 815) {
 		isOnBricks = false;
 		MushroomPos.y += 3;
@@ -181,20 +196,39 @@ void MapAssets::MushroomAnimation() {
 	if (!beginning) {
 		MushroomPos.x -= 2.5;
 	}
-	std::cout << "lets see: " << isOnBricks << std::endl;
+}
+
+void MapAssets::CompletedBrick() {
+	if (hasQuestionPassed[0] == true) {
+	       	DrawTexture(completedBrick, 330, 250, WHITE);
+	}
+	
+	if (hasQuestionPassed[1] == true) { 
+		DrawTexture(completedBrick, 580, 250, WHITE);
+	}
+	
+	if (hasQuestionPassed[2] == true) {
+	       	DrawTexture(completedBrick, 680, 250, WHITE);
+	}
+	if ( hasQuestionPassed[3] == true) { 
+		DrawTexture(completedBrick, 630, 100, WHITE);
+	}
 }
 
 void MapAssets::CoinAnimation() {
 	 //std::cout << "Drawing coin at: " << CoinPos.x << ", " << CoinPos.y << "\n";
-	if (showCoin) {
-        CoinPos.y -= 6; 
-        DrawTexture(coin, CoinPos.x, CoinPos.y, WHITE);
-        coinTimer += GetFrameTime(); 
-          
-        if (coinTimer >= 0.35f) {
-            showCoin = false;   
-        }
-    }
+ 		for (size_t i = 0; i < haveCoinsPassed.size(); i++) {
+       		   if (showCoin[i] and haveCoinsPassed[i] == false) { 
+			allCoinPositions[i].y -= 4;
+		   	DrawTexture(coin, allCoinPositions[i].x, allCoinPositions[i].y, WHITE);
+		        coinTimer[i] += GetFrameTime(); 
+  		        if (coinTimer[i] >= 0.4f) {
+    		       	   showCoin[i] = false;
+		           coinTimer[i] = 0.0f; 
+     			 }
+			      
+		}
+	}
 }
 
 void MapAssets::DrawStairs() {
@@ -225,5 +259,6 @@ void MapAssets::UnloadTextures() {
     UnloadTexture(tube2);
     UnloadTexture(stairs);
     UnloadTexture(coin);
+    UnloadTexture(completedBrick);
 }
 

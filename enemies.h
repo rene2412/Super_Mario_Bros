@@ -24,6 +24,7 @@ class Enemies {
 	 virtual void Update() {};
          virtual void Movement() {};
 };
+
 //Goomba inherits everything from Enemies
 class Goomba : public Enemies {
  public:

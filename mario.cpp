@@ -55,6 +55,9 @@ Mario::Mario() {
     IsFalling = false;
     IsOnGround = true;
     IsOnAsset = false;
+    IsOnBricks = false;
+    usingHead = false;
+    jumpCycle = false;
     hitbox = { Position.x, Position.y, 50, 66 };
     override_jump_animation = false;
     override_left_animation = false;
@@ -64,8 +67,9 @@ Mario::Mario() {
     camera.offset = { 400, 480 }; // Keep Mario centered
     camera.rotation = 0.0f;
     camera.zoom = 0.7f; // Wider zoom for aesthetics
-    
 }
+
+
 
 Mario::~Mario() {
     UnloadTexture(sprite);
@@ -175,10 +179,11 @@ void Mario::Jumping() {
    //Handle when mario jumps
    float air_time = 0.5f;
    double elapsed = GetTime() - start_timer;
-   std::cout << "Clock: " << elapsed << std::endl;
+  // std::cout << "Clock: " << elapsed << std::endl;
    if (elapsed <= air_time) {
       override_jump_animation = true;	
       Position.y -= jump * (1.0f - pow(elapsed / air_time, 2));
+      jumpCycle = false;
    }
    //now when mario reaches his peak he must come down
    //so when mario exceeds his air time, he must travel down 9.8f
@@ -192,7 +197,8 @@ void Mario::Jumping() {
         override_jump_animation = false; 
 	IsFalling = false;
 	IsJumping = false; // Allow jumping again
-   }   
+        jumpCycle = true;
+      }   
 }
 
 

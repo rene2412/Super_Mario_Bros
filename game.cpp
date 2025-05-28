@@ -44,7 +44,58 @@ void Game::Collisions(Mario &mario, Goomba &goomba, MapAssets &map) {
   HandleBrickCollision(mario, map);	
   HandleQuestionCollision(mario, map);
   HandleStairCollision(mario, map);
+  OnTopOfBricks(mario, map);
+  DisableCoinAnimation(mario, map);
+ // std::cout << mario.GetPosition().x << ", " << mario.GetPosition().y << std::endl;;	
+  //std::cout << mario.GetIsOnBricks() << std::endl; 
+  std::cout << "Jumping: " << mario.GetIsJumping() << std::endl;
+  std::cout << "Falling: " << mario.GetIsFalling() << std::endl;
 }
+
+void Game::DisableCoinAnimation(Mario &mario, MapAssets &map) {
+	//std::cout << "Jump Cycle: " << mario.GetJumpCycle() << std::endl;
+	//int n = map.GetHaveCoinsPassed().size();
+	//std::cout << "N: " << n << std::endl;
+	if (mario.GetJumpCycle()) {
+		for (size_t i = 0; i < map.GetHasQuestionPassed().size(); i++) { 
+			//if we already hit a coin dont recalcuate since mario cant hit the same coin twice
+			//if (map.GetHasQuestionPassed()[i] == 1) continue;
+			 if (i == 1) continue;
+			 map.SetHaveCoinsPassed(map.GetHasQuestionPassed()[i], i);
+			 std::cout << "i: " << map.GetHaveCoinsPassed()[i] << std::endl;
+		}
+	}
+}
+
+void Game::OnTopOfBricks(Mario &mario, MapAssets &map) {
+	for (auto &brick : map.GetHardBrick()) {
+       		if ((mario.GetHitBox().y <= brick.y) and mario.GetIsFalling() and
+        	     CheckCollisionRecs(mario.GetHitBox(), brick)) {
+		         mario.SetIsOnBricks(true);
+		}
+		if (mario.GetPosition().x < map.GetHardBrick()[0].x - 35 or mario.GetPosition().x > map.GetHardBrick()[2].x + 25) {
+		        mario.SetIsOnBricks(false);
+		} 
+	}
+	for (auto &brick : map.GetQuestionBrick()) {
+		if ((mario.GetHitBox().y + 10 <= brick.y)  and mario.GetIsFalling() and
+        		 CheckCollisionRecs(mario.GetHitBox(), brick)) {
+			 mario.SetIsOnBricks(true);
+		}
+	}
+	if (mario.GetIsOnBricks()) { 
+	     if (!IsKeyDown(KEY_SPACE)) { 
+		  mario.SetIsOnAsset(true);
+                  mario.SetIsOnGround(false);
+                  mario.SetIsJumping(false);
+                  mario.SetIsFalling(false);
+        	  mario.SetOverrideJumpAnimation(false);
+		  mario.SetPosition({mario.GetPosition().x, 185}); // map.GetHardBrick().y - map.GetHardBrick().height});
+		  std::cout << "here\n"; 
+		}
+	}
+}
+
 
 void Game::HandleStairCollision(Mario &mario, MapAssets &map) {
 	// for every stair check if mario is colliding with it
@@ -75,28 +126,38 @@ void Game::HandleQuestionCollision(Mario &mario, MapAssets &map) {
 	int i = 0;
 	for(auto &brick : map.GetQuestionBrick()) {
 		if (i != 1 and CheckCollisionRecs(mario.GetHitBox(), brick)) {
-			std::cout << "This is brick: " << i << std::endl; 
-		        std::cout << brick.x << ", " << brick.y << "\n"; 	
+			//std::cout << "This is brick: " << map.GetQuestionIndex() << std::endl; 
+			//std::cout << "This is brick i: " << i << std::endl; 
+		        //std::cout << brick.x << ", " << brick.y << "\n"; 	
 			mario.SetIsOnAsset(true);
 			FallFromAsset(mario);
-			  // Center the coin above the brick
-	            	Vector2 newCoinPos;
-			newCoinPos.x = brick.x  + brick.width / 2 - map.GetCoin().width / 2;
-        		newCoinPos.y = brick.y - map.GetCoin().height;
-			map.SetCoinPos(newCoinPos);
-			map.SetShowCoin(true);
+			map.SetRemoveQuestionBricks(false, i);
+			map.SetShowCoin(true, i); 
+			map.SetCoinTimer(0.0f, i);
+			if (i == 0) {
+			map.SetHasQuestionPassed(true, 0);
+			map.SetQuestionIndex(i);
+			break;
+			}
+			if (i == 2) {	
+			map.SetHasQuestionPassed(true, 2);
+			map.SetQuestionIndex(i);
+			}
+			if (i == 3) {	
+			map.SetHasQuestionPassed(true, 3);
+			map.SetQuestionIndex(i);
+			break;
+			}
 		}
 		if (i == 1 and CheckCollisionRecs(mario.GetHitBox(), brick)) {
-			std::cout << "MUSHROOM TIME" << std::endl; 
 			mario.SetIsOnAsset(true);
 			FallFromAsset(mario);
-			Vector2 newMushroomPos;
-			newMushroomPos.x = brick.x  + brick.width / 2 - map.GetMushroom().width / 2;
-        		newMushroomPos.y = brick.y - map.GetMushroom().height;
-			map.SetMushroomPos(newMushroomPos);
 			map.SetMushroomCollided(true);
+			map.SetQuestionIndex(1);
+			map.SetRemoveQuestionBricks(false, 1);
+			map.SetHasQuestionPassed(true, 1);
 		}
-			i++;
+		i++;
 	}
 }
 
@@ -105,14 +166,13 @@ void Game::HandleBrickCollision(Mario &mario, MapAssets &map) {
 		if (CheckCollisionRecs(mario.GetHitBox(), brick)) { 
 			mario.SetIsOnAsset(true);
 			FallFromAsset(mario);
-			}
-        	  }
-  	  }
+		   }
+          }
+}
 
 
 void Game::HandleGoombaCollision(Mario &mario, Goomba &goomba) {
     if (CheckCollisionRecs(mario.GetHitBox(), goomba.GetHitBox())) {
-        std::cout << "Collision with Goomba\n";
     }
 }
 
@@ -123,13 +183,11 @@ void Game::HandleTubeCollision(Mario &mario, Rectangle tubeHitbox, float padding
     if (CheckCollisionRecs(marioHitbox, tubeHitbox) && mario.GetForwardVector().x == 1 && 
 	 mario.GetIsOnGround()) {
     
-        std::cout << "Run L (Tube)\n";
         mario.SetPosition({mario.GetPosition().x - 5, mario.GetPosition().y});
     }
 
     if (CheckCollisionRecs(marioHitbox, tubeHitbox) && mario.GetForwardVector().x == -1 &&
          mario.GetIsOnGround()) {
-        std::cout << "Run R (Tube)\n";
         mario.SetPosition({mario.GetPosition().x + 5, mario.GetPosition().y});
     }
 
@@ -138,8 +196,8 @@ void Game::HandleTubeCollision(Mario &mario, Rectangle tubeHitbox, float padding
         mario.SetIsOnAsset(true);
         mario.SetIsOnGround(false);
         mario.SetIsJumping(false);
-        mario.SetOverrideJumpAnimation(false);
-        std::cout << "Mario landed on tube\n";
+        mario.SetIsFalling(false);
+	mario.SetOverrideJumpAnimation(false);
         mario.SetPosition({mario.GetPosition().x, tubeHitbox.y});
    }
 }
@@ -147,7 +205,6 @@ void Game::HandleTubeCollision(Mario &mario, Rectangle tubeHitbox, float padding
 void Game::FallFromAsset(Mario &mario) {
     Vector2 pos = mario.GetPosition();
     if (mario.GetIsOnAsset()) {
-        std::cout << "1!\n";
 	pos.y += mario.GetGravity() * 0.35f;
         mario.SetIsFalling(true);
         mario.SetIsJumping(true);

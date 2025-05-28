@@ -1,6 +1,7 @@
 #pragma once
 
 #include "raylib.h"
+#include "load_map.h"
 #include <iostream>
 
 class Mario {
@@ -22,6 +23,9 @@ private:
     bool IsOnGround;
     bool IsOnAsset;
     bool IsOnStairs;
+    bool IsOnBricks;
+    bool usingHead;
+    bool jumpCycle;
     float start_timer;
     int frameCounter = 0 ;
     const int switchRate = 5; 
@@ -40,7 +44,10 @@ public:
     bool GetIsOnGround() const { return IsOnGround; }
     bool GetIsOnAsset() const { return IsOnAsset; }
     bool GetIsOnStairs() const { return IsOnStairs; }
-    
+    bool GetIsOnBricks() const { return IsOnBricks; }
+    bool GetIsUsingHead() const { return usingHead; }
+    bool GetJumpCycle() const { return jumpCycle; }
+
 
     void SetPosition(Vector2 newPosition)  { Position = newPosition; }    
     void SetForwardVector(Vector2 newForward) { Forward = newForward; }
@@ -50,7 +57,9 @@ public:
     void SetIsFalling(bool f) { IsFalling = f; }
     void SetIsOnAsset(bool a) { IsOnAsset = a; }
     void SetIsOnStairs(bool s) { IsOnStairs = s; }
+    void SetIsOnBricks(bool b) { IsOnBricks = b; }
     void SetHitBox(Rectangle newHitBox) { hitbox = newHitBox; }
+    void SetIsUsingHead(bool h) { usingHead = h; }
 
     void Update();
     void Combat();

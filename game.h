@@ -14,5 +14,7 @@ public:
     void HandleBrickCollision(Mario &mario, MapAssets &map);
     void HandleQuestionCollision(Mario &mario, MapAssets &map);
     void HandleStairCollision(Mario &mario, MapAssets &map);
+    void OnTopOfBricks(Mario &mario, MapAssets &map);
+    void DisableCoinAnimation(Mario &mario, MapAssets &map); 
 };
 

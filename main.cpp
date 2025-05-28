@@ -19,15 +19,16 @@ int main() {
   Goomba goomba;
   MapAssets map;
    while (!WindowShouldClose()) {
- 	BeginDrawing();
+ 	
+	BeginDrawing();
         ClearBackground(BLUE);
 	BeginBlendMode(BLEND_ALPHA);
 	mario.Camera();
         mario.Movement();
 	game.Collisions(mario, goomba, map);
 	BeginMode2D(mario.GetCamera());
-	map.Draw(); //draw brick
-	mario.Draw(); //DrawMario
+	map.Draw(); 
+	mario.Draw(); 
 	goomba.Update(mario);
 	EndMode2D();
 	EndBlendMode();
@@ -35,6 +36,5 @@ int main() {
     }
  
     CloseWindow();
-    return 0;
 }
 
