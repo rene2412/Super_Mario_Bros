@@ -23,13 +23,11 @@ void Game::Collisions(Mario &mario, Goomba &goomba, MapAssets &map) {
         onAnyAsset = true;
     }
     
-    //these dont exist yet
-    /*
     if (CheckCollisionRecs(mario.GetHitBox(), map.GetTube3())) {
         HandleTubeCollision(mario, map.GetTube3(), 4);
         onAnyAsset = true;
     }
-
+/*
     if (CheckCollisionRecs(mario.GetHitBox(), map.GetTube4())) {
         HandleTubeCollision(mario, map.GetTube4(), 7);
         onAnyAsset = true;
@@ -46,20 +44,16 @@ void Game::Collisions(Mario &mario, Goomba &goomba, MapAssets &map) {
   HandleStairCollision(mario, map);
   OnTopOfBricks(mario, map);
   DisableCoinAnimation(mario, map);
- // std::cout << mario.GetPosition().x << ", " << mario.GetPosition().y << std::endl;;	
+  std::cout << mario.GetPosition().x << ", " << mario.GetPosition().y << std::endl;;	
   //std::cout << mario.GetIsOnBricks() << std::endl; 
-  std::cout << "Jumping: " << mario.GetIsJumping() << std::endl;
-  std::cout << "Falling: " << mario.GetIsFalling() << std::endl;
+  //std::cout << "Jumping: " << mario.GetIsJumping() << std::endl;
+ // std::cout << "Falling: " << mario.GetIsFalling() << std::endl;
 }
 
 void Game::DisableCoinAnimation(Mario &mario, MapAssets &map) {
-	//std::cout << "Jump Cycle: " << mario.GetJumpCycle() << std::endl;
-	//int n = map.GetHaveCoinsPassed().size();
-	//std::cout << "N: " << n << std::endl;
 	if (mario.GetJumpCycle()) {
 		for (size_t i = 0; i < map.GetHasQuestionPassed().size(); i++) { 
 			//if we already hit a coin dont recalcuate since mario cant hit the same coin twice
-			//if (map.GetHasQuestionPassed()[i] == 1) continue;
 			 if (i == 1) continue;
 			 map.SetHaveCoinsPassed(map.GetHasQuestionPassed()[i], i);
 			 std::cout << "i: " << map.GetHaveCoinsPassed()[i] << std::endl;
@@ -78,7 +72,7 @@ void Game::OnTopOfBricks(Mario &mario, MapAssets &map) {
 		} 
 	}
 	for (auto &brick : map.GetQuestionBrick()) {
-		if ((mario.GetHitBox().y + 10 <= brick.y)  and mario.GetIsFalling() and
+		if ((mario.GetHitBox().y <= brick.y)  and mario.GetIsFalling() and
         		 CheckCollisionRecs(mario.GetHitBox(), brick)) {
 			 mario.SetIsOnBricks(true);
 		}
@@ -90,8 +84,8 @@ void Game::OnTopOfBricks(Mario &mario, MapAssets &map) {
                   mario.SetIsJumping(false);
                   mario.SetIsFalling(false);
         	  mario.SetOverrideJumpAnimation(false);
-		  mario.SetPosition({mario.GetPosition().x, 185}); // map.GetHardBrick().y - map.GetHardBrick().height});
-		  std::cout << "here\n"; 
+		  float y = 250 - mario.GetHitBox().height; 
+		  mario.SetPosition({mario.GetPosition().x, y}); // map.GetHardBrick().y - map.GetHardBrick().height});
 		}
 	}
 }
@@ -126,9 +120,6 @@ void Game::HandleQuestionCollision(Mario &mario, MapAssets &map) {
 	int i = 0;
 	for(auto &brick : map.GetQuestionBrick()) {
 		if (i != 1 and CheckCollisionRecs(mario.GetHitBox(), brick)) {
-			//std::cout << "This is brick: " << map.GetQuestionIndex() << std::endl; 
-			//std::cout << "This is brick i: " << i << std::endl; 
-		        //std::cout << brick.x << ", " << brick.y << "\n"; 	
 			mario.SetIsOnAsset(true);
 			FallFromAsset(mario);
 			map.SetRemoveQuestionBricks(false, i);
@@ -172,8 +163,22 @@ void Game::HandleBrickCollision(Mario &mario, MapAssets &map) {
 
 
 void Game::HandleGoombaCollision(Mario &mario, Goomba &goomba) {
-    if (CheckCollisionRecs(mario.GetHitBox(), goomba.GetHitBox())) {
-    }
+    if (mario.GetIsFalling() and goomba.GetIsDamageValid() and mario.GetHitBox().y <= goomba.GetHitBox().y
+	and CheckCollisionRecs(mario.GetHitBox(), goomba.GetHitBox())) {
+   		std::cout << "Goomba ded\n";
+	        goomba.SetIsAlive(false);
+		goomba.SetIsDamageValid(false);
+		return;	
+   }
+   if (CheckCollisionRecs(mario.GetHitBox(), goomba.GetHitBox())) { 	       	
+      if (mario.GetIsAlive() and goomba.GetIsDamageValid()) {
+        std::cout << "Mario ded\n"; 
+	mario.SetIsAlive(false);
+	mario.SetTimer(GetTime());
+	goomba.SetIsDamageValid(false);
+	}
+	return;
+   }
 }
 
 void Game::HandleTubeCollision(Mario &mario, Rectangle tubeHitbox, float padding) {

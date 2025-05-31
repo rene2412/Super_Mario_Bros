@@ -6,8 +6,8 @@
 
 class Mario {
 private:
-    Image img, left_idle, jump_img, jump_img_left, right_img, left_img, bigMario_img, bigMarioWalk_img;
-    Texture2D sprite, left_idle_sprite, jump_sprite, jump_sprite_left, right_sprite, left_sprite, bigMario_sprite, bigMarioWalk_sprite;
+    Image img, left_idle, jump_img, jump_img_left, right_img, left_img, bigMario_img, bigMarioWalk_img, marioDeath_img;
+    Texture2D sprite, left_idle_sprite, jump_sprite, jump_sprite_left, right_sprite, left_sprite, bigMario_sprite, bigMarioWalk_sprite, marioDeath_sprite;
     Vector2 Position;
     Vector2 Forward;
     Rectangle hitbox;
@@ -20,6 +20,7 @@ private:
     bool override_jump_animation;
     bool override_left_animation;
     bool override_right_animation;
+    bool IsAlive;
     bool IsOnGround;
     bool IsOnAsset;
     bool IsOnStairs;
@@ -38,6 +39,8 @@ public:
     Vector2 GetPosition () { return Position; }
     const float GetGravity() const { return gravity; }
     Rectangle GetHitBox() const { return hitbox; }
+    float GetTimer() const { return start_timer; }
+
     bool GetIsJumping() const { return IsJumping; }
     bool GetIsFalling() const { return IsFalling; }
     bool GetOverrideJumpAnimation() const { return override_jump_animation; }
@@ -47,8 +50,9 @@ public:
     bool GetIsOnBricks() const { return IsOnBricks; }
     bool GetIsUsingHead() const { return usingHead; }
     bool GetJumpCycle() const { return jumpCycle; }
+    bool GetIsAlive() const { return IsAlive; }
 
-
+    void SetTimer(float newTimer) {start_timer = newTimer; }
     void SetPosition(Vector2 newPosition)  { Position = newPosition; }    
     void SetForwardVector(Vector2 newForward) { Forward = newForward; }
     void SetIsJumping(bool j) { IsJumping = j; }
@@ -60,6 +64,7 @@ public:
     void SetIsOnBricks(bool b) { IsOnBricks = b; }
     void SetHitBox(Rectangle newHitBox) { hitbox = newHitBox; }
     void SetIsUsingHead(bool h) { usingHead = h; }
+    void SetIsAlive(bool a)  { IsAlive = a; } 
 
     void Update();
     void Combat();
