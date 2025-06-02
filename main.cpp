@@ -12,6 +12,7 @@ int main() {
   const int screenHeight = 600;
        
   InitWindow(screenWidth, screenHeight, "Super Mario Bros");
+  InitAudioDevice();
   SetTargetFPS(60);
   SetTraceLogLevel(LOG_WARNING);
   Game game;
@@ -19,7 +20,6 @@ int main() {
   Goomba goomba;
   MapAssets map;
    while (!WindowShouldClose()) {
- 	
 	BeginDrawing();
         ClearBackground(BLUE);
 	BeginBlendMode(BLEND_ALPHA);
@@ -27,14 +27,14 @@ int main() {
         mario.Movement();
 	game.Collisions(mario, goomba, map);
 	BeginMode2D(mario.GetCamera());
-	map.Draw(); 
+	map.Draw(mario); 
 	mario.Draw(); 
 	goomba.Update(mario);
 	EndMode2D();
 	EndBlendMode();
 	EndDrawing();
     }
- 
+    CloseAudioDevice();
     CloseWindow();
 }
 

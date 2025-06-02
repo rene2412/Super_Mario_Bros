@@ -36,20 +36,47 @@ Mario::Mario() {
     left_sprite = LoadTextureFromImage(left_img);
     UnloadImage(left_img);
 	
+    marioPowerUp_img = LoadImage("images/mario64.png");
+    ImageResize(&marioPowerUp_img, 60, 70); // 50 width and 66 height are just the values from the base animation
+    marioPowerUp_sprite = LoadTextureFromImage(marioPowerUp_img);
+    UnloadImage(marioPowerUp_img);
+
     bigMario_img = LoadImage("images/BigMario.png");
-    ImageResize(&bigMario_img, 100, 120); // 50 width and 66 height are just the values from the base animation
+    ImageResize(&bigMario_img, 90, 100); 
     bigMario_sprite = LoadTextureFromImage(bigMario_img);
     UnloadImage(bigMario_img);
     
-    bigMarioWalk_img = LoadImage("images/plz.png");
-    ImageResize(&bigMarioWalk_img, 100, 120); // 50 width and 66 height are just the values from the base animation
-    bigMarioWalk_sprite = LoadTextureFromImage(bigMarioWalk_img);
-    UnloadImage(bigMarioWalk_img);
+    bigMarioLeft_img = LoadImage("images/BigMarioLeft.png");
+    ImageResize(&bigMarioLeft_img, 90, 100); 
+    bigMarioLeft_sprite = LoadTextureFromImage(bigMarioLeft_img);
+    UnloadImage(bigMarioLeft_img);
+
+    bigMarioWalkRight_img = LoadImage("images/bigMarioWalkRight.png");
+    ImageResize(&bigMarioWalkRight_img, 70, 100); // 50 width and 66 height are just the values from the base animation
+    bigMarioWalkRight_sprite = LoadTextureFromImage(bigMarioWalkRight_img);
+    UnloadImage(bigMarioWalkRight_img);
     
+    bigMarioWalkLeft_img = LoadImage("images/bigMarioWalkLeft.png");
+    ImageResize(&bigMarioWalkLeft_img, 70, 100); // 50 width and 66 height are just the values from the base animation
+    bigMarioWalkLeft_sprite = LoadTextureFromImage(bigMarioWalkLeft_img);
+    UnloadImage(bigMarioWalkLeft_img);
+
+    bigMarioJumpRight_img = LoadImage("images/bigMarioJumpRight.png");
+    ImageResize(&bigMarioJumpRight_img, 70, 100); // 50 width and 66 height are just the values from the base animation
+    bigMarioJumpRight_sprite = LoadTextureFromImage(bigMarioJumpRight_img);
+    UnloadImage(bigMarioJumpRight_img);
+
+    bigMarioJumpLeft_img = LoadImage("images/bigMarioJumpLeft.png");
+    ImageResize(&bigMarioJumpLeft_img, 70, 100); // 50 width and 66 height are just the values from the base animation
+    bigMarioJumpLeft_sprite = LoadTextureFromImage(bigMarioJumpLeft_img);
+    UnloadImage(bigMarioJumpLeft_img);
+
     marioDeath_img = LoadImage("images/marioDeath.png");
     ImageResize(&marioDeath_img, 50, 66); // 50 width and 66 height are just the values from the base animation
     marioDeath_sprite = LoadTextureFromImage(marioDeath_img);
     UnloadImage(marioDeath_img);
+
+    powerUp = LoadSound("sounds/powerUp.wav");
 
     Forward = { 1, 0 };
     Position.x = 50;
@@ -62,9 +89,12 @@ Mario::Mario() {
     IsOnGround = true;
     IsOnAsset = false;
     IsOnBricks = false;
+    IsBig = false;
+    playedPoweredUp = false;
     usingHead = false;
     jumpCycle = false;
     hitbox = { Position.x, Position.y, 50, 66 };
+    big_hitbox = { Position.x, Position.y, 110, 120 };
     override_jump_animation = false;
     override_left_animation = false;
     override_right_animation = false;
@@ -75,8 +105,6 @@ Mario::Mario() {
     camera.zoom = 0.7f; // Wider zoom for aesthetics
 }
 
-
-
 Mario::~Mario() {
     UnloadTexture(sprite);
     UnloadTexture(jump_sprite);
@@ -85,7 +113,13 @@ Mario::~Mario() {
     UnloadTexture(left_idle_sprite);
     UnloadTexture(left_sprite);
     UnloadTexture(bigMario_sprite);
+    UnloadTexture(bigMarioLeft_sprite);
+    UnloadTexture(bigMarioWalkLeft_sprite);
+    UnloadTexture(bigMarioWalkRight_sprite);
+    UnloadTexture(bigMarioJumpRight_sprite);
+    UnloadTexture(bigMarioJumpLeft_sprite);
     UnloadTexture(marioDeath_sprite);
+    UnloadTexture(marioPowerUp_sprite);
 }
 
 Camera2D& Mario::GetCamera() {
@@ -99,17 +133,41 @@ void Mario::Update() {
 	Camera();
 }
 
+void Mario::PowerUpAnimation() {
+float timer = GetTime() - start_timer;
+if (IsBig and playedPoweredUp == false) {
+	if (timer <= 0.2) {
+	std::cout << "here1\n";
+  	//play the base sprite for 0.2s
+   	PlaySound(powerUp);
+	std::cout << "playing sound\n";
+	DrawTexture(sprite, Position.x, Position.y, WHITE);
+	}
+	else if (timer <= 0.4) {
+	std::cout << "here2\n";
+	//play the second between this time
+  	DrawTexture(marioPowerUp_sprite, Position.x, Position.y - 10, WHITE);
+	}
+	else if(timer > 0.6) {
+	std::cout << "here3\n";
+   	DrawTexture(bigMario_sprite, Position.x, Position.y - 35, WHITE);
+        playedPoweredUp = true;
+     		}	
+	}
+}
 
 void Mario::Draw() {
-    DrawTexture(bigMarioWalk_sprite, 100, 120, WHITE);
-   if (override_jump_animation) { 
+  //DrawTexture(marioPowerUp_sprite, 100, 100, WHITE);
+  PowerUpAnimation(); 
+  if (IsBig == false) {
+      if (override_jump_animation) { 
 	   if (GetForwardVector().x == 1 and GetForwardVector().y == 0) {
 	 	 DrawTexture(jump_sprite, Position.x, Position.y, WHITE);
    	    }
 	   else	 DrawTexture(jump_sprite_left, Position.x, Position.y, WHITE);
             
      }
-   else if (override_left_animation) { 
+     else if (override_left_animation) { 
    	frameCounter ++;
         //Alternate between base and right sprite
         if ((frameCounter / switchRate) % 2 == 0) {
@@ -118,8 +176,8 @@ void Mario::Draw() {
             DrawTexture(left_sprite, Position.x, Position.y, WHITE);
         }
 
-   }
-   else if (override_right_animation) { 
+    }
+     else if (override_right_animation) { 
     	   frameCounter ++;
        // Alternate between base and right sprite
         if ((frameCounter / switchRate) % 2 == 0) {
@@ -127,8 +185,8 @@ void Mario::Draw() {
         } else {
             DrawTexture(right_sprite, Position.x, Position.y, WHITE);
         }
-   }
-   else if (IsAlive == false) {
+    }
+     else if (IsAlive == false) {
    	DrawTexture(marioDeath_sprite, Position.x, Position.y, WHITE);
    
 	float air_time = 0.5f;
@@ -146,6 +204,39 @@ void Mario::Draw() {
 	   	DrawTexture(sprite, Position.x, Position.y, WHITE);
   	   }
 	   else DrawTexture(left_idle_sprite, Position.x, Position.y, WHITE);
+		}
+	}
+   if (IsBig and playedPoweredUp) {
+	   if (override_jump_animation) { 
+	   	if (GetForwardVector().x == 1) {
+	 	  DrawTexture(bigMarioJumpRight_sprite, Position.x, Position.y - 35, WHITE);
+   	    	}
+	    else  DrawTexture(bigMarioJumpLeft_sprite, Position.x, Position.y - 35, WHITE);
+     	}
+	else if (override_left_animation) { 
+	 	frameCounter ++;
+		if ((frameCounter / switchRate) % 2 == 0) {
+    			DrawTexture(bigMarioLeft_sprite, Position.x, Position.y - 35, WHITE);
+		}
+		else {
+    			DrawTexture(bigMarioWalkLeft_sprite, Position.x, Position.y - 35, WHITE);
+		}
+	     }
+	 else if (override_right_animation) {
+	 	frameCounter ++;
+		if ((frameCounter / switchRate) % 2 == 0) {
+    			DrawTexture(bigMario_sprite, Position.x, Position.y - 35, WHITE);
+		}
+		else {
+    			DrawTexture(bigMarioWalkRight_sprite, Position.x, Position.y - 35, WHITE);
+		}
+	 }
+    else {
+		if (GetForwardVector().x == 1) {
+    			DrawTexture(bigMario_sprite, Position.x, Position.y - 35, WHITE);
+	 	}
+		   else DrawTexture(bigMarioLeft_sprite, Position.x, Position.y -  35, WHITE);
+   		}	
 	}
 }
 

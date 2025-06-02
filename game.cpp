@@ -42,13 +42,26 @@ void Game::Collisions(Mario &mario, Goomba &goomba, MapAssets &map) {
   HandleBrickCollision(mario, map);	
   HandleQuestionCollision(mario, map);
   HandleStairCollision(mario, map);
+  HandleMushroomCollision(mario, map);
   OnTopOfBricks(mario, map);
   DisableCoinAnimation(mario, map);
-  std::cout << mario.GetPosition().x << ", " << mario.GetPosition().y << std::endl;;	
+  //std::cout << mario.GetPosition().x << ", " << mario.GetPosition().y << std::endl;;	
   //std::cout << mario.GetIsOnBricks() << std::endl; 
   //std::cout << "Jumping: " << mario.GetIsJumping() << std::endl;
  // std::cout << "Falling: " << mario.GetIsFalling() << std::endl;
+
 }
+
+
+void Game::HandleMushroomCollision(Mario &mario, MapAssets &map) {
+	if (CheckCollisionRecs(mario.GetHitBox(), map.GetMushroom())) {
+		//std::cout << "big mario time\n";
+	        mario.SetIsBig(true); 	
+		mario.SetTimer(GetTime());
+	} 
+}
+
+
 
 void Game::DisableCoinAnimation(Mario &mario, MapAssets &map) {
 	if (mario.GetJumpCycle()) {
@@ -56,7 +69,7 @@ void Game::DisableCoinAnimation(Mario &mario, MapAssets &map) {
 			//if we already hit a coin dont recalcuate since mario cant hit the same coin twice
 			 if (i == 1) continue;
 			 map.SetHaveCoinsPassed(map.GetHasQuestionPassed()[i], i);
-			 std::cout << "i: " << map.GetHaveCoinsPassed()[i] << std::endl;
+			// std::cout << "i: " << map.GetHaveCoinsPassed()[i] << std::endl;
 		}
 	}
 }
@@ -165,14 +178,14 @@ void Game::HandleBrickCollision(Mario &mario, MapAssets &map) {
 void Game::HandleGoombaCollision(Mario &mario, Goomba &goomba) {
     if (mario.GetIsFalling() and goomba.GetIsDamageValid() and mario.GetHitBox().y <= goomba.GetHitBox().y
 	and CheckCollisionRecs(mario.GetHitBox(), goomba.GetHitBox())) {
-   		std::cout << "Goomba ded\n";
+   		//std::cout << "Goomba ded\n";
 	        goomba.SetIsAlive(false);
 		goomba.SetIsDamageValid(false);
 		return;	
    }
    if (CheckCollisionRecs(mario.GetHitBox(), goomba.GetHitBox())) { 	       	
       if (mario.GetIsAlive() and goomba.GetIsDamageValid()) {
-        std::cout << "Mario ded\n"; 
+        //std::cout << "Mario ded\n"; 
 	mario.SetIsAlive(false);
 	mario.SetTimer(GetTime());
 	goomba.SetIsDamageValid(false);

@@ -118,7 +118,7 @@ MapAssets::~MapAssets() {
 }
 
 // Draw function
-void MapAssets::Draw() {
+void MapAssets::Draw(Mario &mario) {
     int x = 0;
     int y = 599;
 
@@ -163,15 +163,16 @@ void MapAssets::Draw() {
 	 CoinAnimation();
 	// DrawStairs();
 	 if (GetMushroomCollided()) {
-		 MushroomAnimation();
-	 }
+		 MushroomAnimation(mario);
+	     }	
 	 CompletedBrick();
 }
 
 static bool beginning = true;
-void MapAssets::MushroomAnimation() {
-	std::cout << MushroomPos.x << ", " << MushroomPos.y << std::endl;
-	  if (beginning) {   
+void MapAssets::MushroomAnimation(Mario &mario) {
+	//std::cout << MushroomPos.x << ", " << MushroomPos.y << std::endl;
+if (mario.GetIsPoweredUp() == false) { 	 
+       	if (beginning) {   
 		MushroomPos.x += 1.2;
 		}
 	  DrawTexture(mushroom, MushroomPos.x, MushroomPos.y, WHITE);
@@ -187,6 +188,7 @@ void MapAssets::MushroomAnimation() {
 	      }
 	if (!beginning) {
 		MushroomPos.x -= 2.5;
+		}
 	}
 }
 
@@ -194,11 +196,9 @@ void MapAssets::CompletedBrick() {
 	if (hasQuestionPassed[0] == true) {
 	       	DrawTexture(completedBrick, 330, 250, WHITE);
 	}
-	
 	if (hasQuestionPassed[1] == true) { 
 		DrawTexture(completedBrick, 580, 250, WHITE);
 	}
-	
 	if (hasQuestionPassed[2] == true) {
 	       	DrawTexture(completedBrick, 680, 250, WHITE);
 	}

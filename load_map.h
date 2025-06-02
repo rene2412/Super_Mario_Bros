@@ -3,6 +3,9 @@
 #include "raylib.h"
 #include "mario.h"
 #include <vector>
+
+class Mario;
+
 class MapAssets {
 private:
     Texture2D brick, hill, question, tube, tube2, tube3, tube4, hardbrick, cloud, mushroom, stairs, coin, completedBrick;
@@ -22,10 +25,8 @@ private:
     std::vector<bool> hasQuestionPassed; 
     std::vector<bool> haveCoinsPassed;
     std::vector<bool> showCoin;
-
     std::vector<float> coinTimer;
-
-
+    
     bool mushroomCollided = false;
     int questionIndex;
 
@@ -33,10 +34,10 @@ public:
     MapAssets();  
     ~MapAssets(); 
 
-    void Draw();  
+    void Draw(Mario& mario);  
     void CoinAnimation();
     void DrawStairs();     
-    void MushroomAnimation();    
+    void MushroomAnimation(Mario &mario);    
     void CompletedBrick();
 
     bool GetMushroomCollided() const { return mushroomCollided; }
@@ -69,7 +70,7 @@ public:
     Rectangle GetMushroom() { 
 	     hitbox_mushroom.x = MushroomPos.x;
              hitbox_mushroom.y = MushroomPos.y;
-	    return hitbox_mushroom; 
+	     return hitbox_mushroom; 
     }
     Rectangle GetTube() const { return hitbox_tube; }
     Rectangle GetTube2() const { return hitbox_tube2; }

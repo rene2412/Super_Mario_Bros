@@ -16,5 +16,6 @@ public:
     void HandleStairCollision(Mario &mario, MapAssets &map);
     void OnTopOfBricks(Mario &mario, MapAssets &map);
     void DisableCoinAnimation(Mario &mario, MapAssets &map); 
+    void HandleMushroomCollision(Mario &mario, MapAssets &map);
 };
 
