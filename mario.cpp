@@ -98,7 +98,8 @@ Mario::Mario() {
     override_jump_animation = false;
     override_left_animation = false;
     override_right_animation = false;
-    // Camera setup
+    showMushroom = true; 
+   // Camera setup
     camera.target = Position;
     camera.offset = { 400, 480 }; // Keep Mario centered
     camera.rotation = 0.0f;
@@ -127,34 +128,47 @@ Camera2D& Mario::GetCamera() {
 }
 
 void Mario::Update() {
-	Draw();
 	Movement();
 	Jumping();
 	Camera();
+	Draw();
 }
 
 void Mario::PowerUpAnimation() {
+static bool anim1 = false;
+static bool anim2 = false;
+static bool anim3 = false;
+if (IsBig  and playedPoweredUp == false) {
 float timer = GetTime() - start_timer;
-if (IsBig and playedPoweredUp == false) {
+std::cout << "Timer: " << timer << std::endl;
 	if (timer <= 0.2) {
 	std::cout << "here1\n";
   	//play the base sprite for 0.2s
    	PlaySound(powerUp);
 	std::cout << "playing sound\n";
-	DrawTexture(sprite, Position.x, Position.y, WHITE);
+	//if (anim1 == false) {
+		DrawTexture(sprite, Position.x, Position.y, WHITE);
+			
+//	anim1 = true;
+	//	}
 	}
 	else if (timer <= 0.4) {
 	std::cout << "here2\n";
 	//play the second between this time
-  	DrawTexture(marioPowerUp_sprite, Position.x, Position.y - 10, WHITE);
+  	//if (anim2 == false) {
+		DrawTexture(marioPowerUp_sprite, Position.x, Position.y - 10, WHITE);
+	//	anim2 = false;
+	//	}
 	}
-	else if(timer > 0.6) {
+	else if (timer > 0.4) {
 	std::cout << "here3\n";
-   	DrawTexture(bigMario_sprite, Position.x, Position.y - 35, WHITE);
-        playedPoweredUp = true;
-     		}	
+   	//	if (anim3 == false) {
+		DrawTexture(bigMario_sprite, Position.x, Position.y - 35, WHITE);
+        	playedPoweredUp = true;
+	//	anim3 = true;
+     			}	
+		}
 	}
-}
 
 void Mario::Draw() {
   //DrawTexture(marioPowerUp_sprite, 100, 100, WHITE);

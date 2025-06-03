@@ -175,7 +175,9 @@ if (mario.GetIsPoweredUp() == false) {
        	if (beginning) {   
 		MushroomPos.x += 1.2;
 		}
-	  DrawTexture(mushroom, MushroomPos.x, MushroomPos.y, WHITE);
+	 if (mario.GetShowMushroom()) { 
+	 	DrawTexture(mushroom, MushroomPos.x, MushroomPos.y, WHITE);
+	 }
 	if (MushroomPos.x >= 765) {
 		MushroomPos.y += 4.3;
 		if (MushroomPos.y >= 443) {

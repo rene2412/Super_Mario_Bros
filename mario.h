@@ -33,6 +33,7 @@ private:
     bool playedPoweredUp;
     bool usingHead;
     bool jumpCycle;
+    bool showMushroom;
     float start_timer;
     int frameCounter = 0;
     int switchRate = 10;
@@ -59,6 +60,7 @@ public:
     bool GetIsAlive() const { return IsAlive; }
     bool GetIsBig() const { return IsBig; }
     bool GetIsPoweredUp() const { return playedPoweredUp; }
+    bool GetShowMushroom() const { return showMushroom; }    
 
     void SetTimer(float newTimer) {start_timer = newTimer; }
     void SetPosition(Vector2 newPosition)  { Position = newPosition; }    
@@ -75,6 +77,7 @@ public:
     void SetIsAlive(bool a)  { IsAlive = a; } 
     void SetIsBig(bool b) { IsBig = b; }
     void SetIsPoweredUp(bool p) { playedPoweredUp = p; }
+    void SetShowMushroom(bool s) { showMushroom = s; }
 
     void Update();
     void Combat();

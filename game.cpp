@@ -54,10 +54,12 @@ void Game::Collisions(Mario &mario, Goomba &goomba, MapAssets &map) {
 
 
 void Game::HandleMushroomCollision(Mario &mario, MapAssets &map) {
-	if (CheckCollisionRecs(mario.GetHitBox(), map.GetMushroom())) {
-		//std::cout << "big mario time\n";
-	        mario.SetIsBig(true); 	
+	if (CheckCollisionRecs(mario.GetHitBox(), map.GetMushroom()) and mario.GetIsBig() == false) {
+		std::cout << "big mario time\n";
+		mario.SetShowMushroom(false);	
 		mario.SetTimer(GetTime());
+	        mario.SetIsBig(true); 
+		mario.SetIsPoweredUp(false); // Reset animation state
 	} 
 }
 
