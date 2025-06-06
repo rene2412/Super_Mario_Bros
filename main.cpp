@@ -17,19 +17,23 @@ int main() {
   SetTraceLogLevel(LOG_WARNING);
   Game game;
   Mario mario;
-  Goomba goomba;
   MapAssets map;
+  std::vector<std::shared_ptr<Goomba>> goombas;
+  Goomba::Spawn(goombas);
    while (!WindowShouldClose()) {
 	BeginDrawing();
         ClearBackground(BLUE);
 	BeginBlendMode(BLEND_ALPHA);
 	mario.Camera();
         mario.Movement();
-	game.Collisions(mario, goomba, map);
+	game.Collisions(mario, goombas, map);
 	BeginMode2D(mario.GetCamera());
 	map.Draw(mario); 
 	mario.Draw(); 
-	goomba.Update(mario);
+	for (auto g : goombas) {
+		g->Draw();
+		g->Update(mario);
+	}
 	EndMode2D();
 	EndBlendMode();
 	EndDrawing();

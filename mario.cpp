@@ -67,7 +67,7 @@ Mario::Mario() {
     UnloadImage(bigMarioJumpRight_img);
 
     bigMarioJumpLeft_img = LoadImage("images/bigMarioJumpLeft.png");
-    ImageResize(&bigMarioJumpLeft_img, 70, 100); // 50 width and 66 height are just the values from the base animation
+    ImageResize(&bigMarioJumpLeft_img, 60, 100); // 50 width and 66 height are just the values from the base animation
     bigMarioJumpLeft_sprite = LoadTextureFromImage(bigMarioJumpLeft_img);
     UnloadImage(bigMarioJumpLeft_img);
 
@@ -152,7 +152,7 @@ std::cout << "Timer: " << timer << std::endl;
 //	anim1 = true;
 	//	}
 	}
-	else if (timer <= 0.4) {
+	else if (timer <= 0.5) {
 	std::cout << "here2\n";
 	//play the second between this time
   	//if (anim2 == false) {
@@ -160,7 +160,7 @@ std::cout << "Timer: " << timer << std::endl;
 	//	anim2 = false;
 	//	}
 	}
-	else if (timer > 0.4) {
+	else if (timer > 0.6) {
 	std::cout << "here3\n";
    	//	if (anim3 == false) {
 		DrawTexture(bigMario_sprite, Position.x, Position.y - 35, WHITE);

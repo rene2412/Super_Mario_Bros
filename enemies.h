@@ -1,6 +1,8 @@
 #pragma once
 #include "raylib.h"
 #include "mario.h"
+#include <memory>
+#include <vector>
 
 class Enemies {
     protected:
@@ -19,7 +21,9 @@ class Enemies {
 	 Enemies() {}
 	 virtual ~Enemies() {}
          Vector2 GetPosition() const { return Position; }
-	 Rectangle GetHitBox() const { return HitBox; }
+	 Rectangle GetHitBox() const {
+   		 return Rectangle{ Position.x, Position.y, HitBox.width, HitBox.height };
+	}
 	 float GetSpeed() const { return speed; }
          float GetFrameSpeed() const { return frame_speed; }
 	 bool GetIsAlive() const { return IsAlive; }
@@ -40,17 +44,26 @@ class Enemies {
 	 virtual void Update() {};
          virtual void Movement() {};
 	 virtual void Animations() {};
+	 virtual void Spawn() {};
 };
 
 //Goomba inherits everything from Enemies
 class Goomba : public Enemies {
- public:
+    private:
+	static Image img, img2, img3, img4;
+	static Texture2D sprite, sprite1, sprite2, sprite3, sprite4;
+
+    public:
 	 Goomba();
 	 ~Goomba();
-         
-	 void Draw();
-	 void Animations();
+	 static void LoadTextures(); 
+	 static void FreeTextures();
+
+	 void Draw() override;
+	 void Animations() override;
+	 static void Spawn(std::vector<std::shared_ptr<Goomba>>& goomba); 
 	 void Update(Mario &mario);
 	 void Movement(Mario &mario);
-	 
-}; 
+};
+
+extern std::vector<std::shared_ptr<Goomba>> goomba;

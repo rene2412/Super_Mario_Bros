@@ -7,8 +7,8 @@ class Game {
 
 public:
     Game();
-    void Collisions(Mario &mario, Goomba &goomba, MapAssets &map);
-    void HandleGoombaCollision(Mario &mario, Goomba &goomba);
+    void Collisions(Mario &mario, std::vector<std::shared_ptr<Goomba>>& goombas, MapAssets &map);
+    void HandleGoombaCollision(Mario &mario, Goomba& goomba);
     void HandleTubeCollision(Mario &mario, Rectangle tubeHitbox, float padding); 
     void FallFromAsset(Mario &mario);
     void HandleBrickCollision(Mario &mario, MapAssets &map);
@@ -17,5 +17,8 @@ public:
     void OnTopOfBricks(Mario &mario, MapAssets &map);
     void DisableCoinAnimation(Mario &mario, MapAssets &map); 
     void HandleMushroomCollision(Mario &mario, MapAssets &map);
+    void GoombaTubeCollision(std::vector<std::shared_ptr<Goomba>>& goombas, Rectangle rectangle);
 };
+
+
 

@@ -4,9 +4,19 @@
 
 Game::Game() {}
   
-void Game::Collisions(Mario &mario, Goomba &goomba, MapAssets &map) {
-    HandleGoombaCollision(mario, goomba);
-    
+void Game::Collisions(Mario &mario, std::vector<std::shared_ptr<Goomba>>& goombas, MapAssets &map) {
+   int i = 0; 
+   for (auto g : goombas) {
+	    std::cout << "Goomba: " << i << "(" << g->GetPosition().x << ", " << g->GetPosition().y << ")\n";  
+	   if (g->GetIsAlive()) {
+		HandleGoombaCollision(mario, *g);
+		if ((i == 1 or i == 2) and g->GetHitBox().x <= map.GetTube2().x + map.GetTube().width) {
+			float newX = map.GetTube2().x + map.GetTube().width;
+			g->SetPosition({newX, g->GetHitBox().y});
+			}
+		 }
+	   i++;
+	}
     // Store current state before checking collisions
     bool wasOnAsset = mario.GetIsOnAsset();
     bool onAnyAsset = false;
@@ -34,6 +44,7 @@ void Game::Collisions(Mario &mario, Goomba &goomba, MapAssets &map) {
     }
     */
 
+ // GoombaTubeCollision(goombas, map.GetTube2());
     // If Mario was on an asset but now isn't on any asset, handle falling
     if (wasOnAsset && !onAnyAsset) {
         FallFromAsset(mario);
@@ -45,11 +56,20 @@ void Game::Collisions(Mario &mario, Goomba &goomba, MapAssets &map) {
   HandleMushroomCollision(mario, map);
   OnTopOfBricks(mario, map);
   DisableCoinAnimation(mario, map);
-  //std::cout << mario.GetPosition().x << ", " << mario.GetPosition().y << std::endl;;	
+  std::cout << mario.GetPosition().x << ", " << mario.GetPosition().y << std::endl;;	
   //std::cout << mario.GetIsOnBricks() << std::endl; 
   //std::cout << "Jumping: " << mario.GetIsJumping() << std::endl;
  // std::cout << "Falling: " << mario.GetIsFalling() << std::endl;
 
+}
+
+void Game::GoombaTubeCollision(std::vector<std::shared_ptr<Goomba>> &goombas, Rectangle rectangle) {
+	for (auto &g : goombas) {
+		std::cout << "GOOOMBAAA\n";
+		if (CheckCollisionRecs(g->GetHitBox(), rectangle)) {
+			std::cout << "here\n";
+		}
+	}
 }
 
 
@@ -219,7 +239,7 @@ void Game::HandleTubeCollision(Mario &mario, Rectangle tubeHitbox, float padding
         mario.SetIsFalling(false);
 	mario.SetOverrideJumpAnimation(false);
         mario.SetPosition({mario.GetPosition().x, tubeHitbox.y});
-   }
+   	}
 }
 
 void Game::FallFromAsset(Mario &mario) {
