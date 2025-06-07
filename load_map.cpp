@@ -53,10 +53,12 @@ MapAssets::MapAssets() : removeQuestionBricks(4, true), hasQuestionPassed(4, fal
 
     Image img9 = LoadImage("images/tube.png");
     ImageResize(&img9, img9.width / 3, img9.height - 100);
-    hitbox_tube2 = {1515, 220, float((img9.width /  4) + 40) , float(img9.height - 100) }; 
-    hitbox_tube3 = {2000, 220, float((img9.width /  4) + 40) , float(img9.height - 100) }; 
+    hitbox_tube2 = {1515, 220, float((img9.width /  4) + 40) , float(img9.height - 100)}; 
+    hitbox_tube3 = {2000, 220, float((img9.width /  4) + 40) , float(img9.height - 100)}; 
+    hitbox_tube4 = {2600, 220, float((img9.width /  4) + 40) , float(img9.height - 100)}; 
     tube2 = LoadTextureFromImage(img9);
     tube3 = LoadTextureFromImage(img9);
+    tube4 = LoadTextureFromImage(img9);
     UnloadImage(img9);
 
     Image img10 = LoadImage("images/coin.png");
@@ -103,7 +105,7 @@ MapAssets::MapAssets() : removeQuestionBricks(4, true), hasQuestionPassed(4, fal
     haveCoinsPassed.resize(3, false);
 
     allCoinPositions = {
-    	{330, 250},
+    {330, 250},
 	{680, 100},
 	{680, 250}
     };
@@ -132,6 +134,11 @@ void MapAssets::Draw(Mario &mario) {
     }
 
     DrawTexture(hill, 230, 402, WHITE);
+    DrawTexture(hill, 765, 402, WHITE);
+    DrawTexture(hill, 1785, 402, WHITE);
+    DrawTexture(hill, 2200, 402, WHITE);
+    DrawTexture(hill, 2900, 402, WHITE);
+    DrawTexture(hill, 3140, 402, WHITE);
     //this is the first question block brick
     if(removeQuestionBricks[0] == true) {
 	    DrawTexture(question, 330, 250, WHITE);
@@ -160,6 +167,7 @@ void MapAssets::Draw(Mario &mario) {
    	 DrawTexture(tube, 880, 283, WHITE);
    	 DrawTexture(tube2, 1500, 180, WHITE);
    	 DrawTexture(tube3, 2000, 180, WHITE);
+   	 DrawTexture(tube4, 2600, 180, WHITE);
 	 CoinAnimation();
 	// DrawStairs();
 	 if (GetMushroomCollided()) {

@@ -140,33 +140,20 @@ static bool anim2 = false;
 static bool anim3 = false;
 if (IsBig  and playedPoweredUp == false) {
 float timer = GetTime() - start_timer;
-std::cout << "Timer: " << timer << std::endl;
 	if (timer <= 0.2) {
-	std::cout << "here1\n";
   	//play the base sprite for 0.2s
    	PlaySound(powerUp);
 	std::cout << "playing sound\n";
-	//if (anim1 == false) {
 		DrawTexture(sprite, Position.x, Position.y, WHITE);
 			
-//	anim1 = true;
-	//	}
 	}
 	else if (timer <= 0.5) {
-	std::cout << "here2\n";
-	//play the second between this time
-  	//if (anim2 == false) {
 		DrawTexture(marioPowerUp_sprite, Position.x, Position.y - 10, WHITE);
-	//	anim2 = false;
-	//	}
 	}
 	else if (timer > 0.6) {
-	std::cout << "here3\n";
-   	//	if (anim3 == false) {
 		DrawTexture(bigMario_sprite, Position.x, Position.y - 35, WHITE);
         	playedPoweredUp = true;
-	//	anim3 = true;
-     			}	
+     		}	
 		}
 	}
 
@@ -206,7 +193,6 @@ void Mario::Draw() {
 	float air_time = 0.5f;
    	double elapsed = GetTime() - start_timer;
    	if (elapsed <= air_time) {
-		std::cout << "here\n";
       		Position.y -= 4;
    	  }
          if (elapsed > air_time) {

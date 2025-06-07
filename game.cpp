@@ -10,8 +10,12 @@ void Game::Collisions(Mario &mario, std::vector<std::shared_ptr<Goomba>>& goomba
 	    std::cout << "Goomba: " << i << "(" << g->GetPosition().x << ", " << g->GetPosition().y << ")\n";  
 	   if (g->GetIsAlive()) {
 		HandleGoombaCollision(mario, *g);
-		if ((i == 1 or i == 2) and g->GetHitBox().x <= map.GetTube2().x + map.GetTube().width) {
+		if (i == 1 and g->GetHitBox().x <= map.GetTube2().x + map.GetTube().width) {
 			float newX = map.GetTube2().x + map.GetTube().width;
+			g->SetPosition({newX, g->GetHitBox().y});
+			}
+		if ((i == 2 and i == 3) and g->GetHitBox().x <= map.GetTube3().x + map.GetTube3().width) {
+			float newX = map.GetTube3().x + map.GetTube3().width;
 			g->SetPosition({newX, g->GetHitBox().y});
 			}
 		 }
@@ -37,12 +41,10 @@ void Game::Collisions(Mario &mario, std::vector<std::shared_ptr<Goomba>>& goomba
         HandleTubeCollision(mario, map.GetTube3(), 4);
         onAnyAsset = true;
     }
-/*
     if (CheckCollisionRecs(mario.GetHitBox(), map.GetTube4())) {
-        HandleTubeCollision(mario, map.GetTube4(), 7);
+        HandleTubeCollision(mario, map.GetTube4(), 4);
         onAnyAsset = true;
     }
-    */
 
  // GoombaTubeCollision(goombas, map.GetTube2());
     // If Mario was on an asset but now isn't on any asset, handle falling
@@ -65,9 +67,7 @@ void Game::Collisions(Mario &mario, std::vector<std::shared_ptr<Goomba>>& goomba
 
 void Game::GoombaTubeCollision(std::vector<std::shared_ptr<Goomba>> &goombas, Rectangle rectangle) {
 	for (auto &g : goombas) {
-		std::cout << "GOOOMBAAA\n";
 		if (CheckCollisionRecs(g->GetHitBox(), rectangle)) {
-			std::cout << "here\n";
 		}
 	}
 }
@@ -75,7 +75,6 @@ void Game::GoombaTubeCollision(std::vector<std::shared_ptr<Goomba>> &goombas, Re
 
 void Game::HandleMushroomCollision(Mario &mario, MapAssets &map) {
 	if (CheckCollisionRecs(mario.GetHitBox(), map.GetMushroom()) and mario.GetIsBig() == false) {
-		std::cout << "big mario time\n";
 		mario.SetShowMushroom(false);	
 		mario.SetTimer(GetTime());
 	        mario.SetIsBig(true); 

@@ -52,17 +52,18 @@ void Goomba::FreeTextures() {
 }
 
 void Goomba::Spawn(std::vector<std::shared_ptr<Goomba>>& goomba) {
-    std::vector<float> positionsX = { 500, 1680, 1880 };
-    std::vector<float> positionsY = { 446, 446, 446 };
-    for (int i = 0; i < 3; i++) {
+    std::vector<float> positionsX = { 500, 1680, 2400, 2500 };
+    std::vector<float> positionsY = { 446, 446, 446, 446 };
+	int N = positionsX.size();
+	for (int i = 0; i < N; i++) {
 	//shared smart pointer since all goombas do the same thing
     	auto g = std::make_shared<Goomba>();
-	g->SetPosition({positionsX[i], positionsY[i]});	
-    	g->SetHitBox({positionsX[i], positionsY[i], 55, 40});
-	g->SetSpeed(1.5);
-	g->SetIsAlive(true);
-	g->SetIsMoving(false);
-	g->SetIsDamageValid(true);
+		g->SetPosition({positionsX[i], positionsY[i]});	
+   	 	g->SetHitBox({positionsX[i], positionsY[i], 55, 40});
+		g->SetSpeed(1.5);
+		g->SetIsAlive(true);
+		g->SetIsMoving(false);
+		g->SetIsDamageValid(true);
     	goomba.push_back(g);
     }
 }

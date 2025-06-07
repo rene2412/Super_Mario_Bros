@@ -9,7 +9,7 @@ class Mario;
 class MapAssets {
 private:
     Texture2D brick, hill, question, tube, tube2, tube3, tube4, hardbrick, cloud, mushroom, stairs, coin, completedBrick;
-    Rectangle hitbox_tube, hitbox_tube2, hitbox_tube3, hitbox_tube4, hitbox_mushroom;
+    Rectangle hitbox_tube, hitbox_tube2, hitbox_tube3, hitbox_tube4, hitbox_tube5, hitbox_tube6, hitbox_mushroom;
     Vector2 MushroomPos;
 
     void LoadTextures();   // Load textures once
@@ -76,6 +76,8 @@ public:
     Rectangle GetTube2() const { return hitbox_tube2; }
     Rectangle GetTube3() const { return hitbox_tube3; }
     Rectangle GetTube4() const { return hitbox_tube4; }
+    Rectangle GetTube5() const { return hitbox_tube5; }
+    Rectangle GetTube6() const { return hitbox_tube6; }
     
     const std::vector<Rectangle> &GetHardBrick() const { return hitbox_hardbricks; }
     const std::vector<Rectangle> &GetQuestionBrick() const { return question_bricks; }
