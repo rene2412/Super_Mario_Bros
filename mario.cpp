@@ -79,7 +79,8 @@ Mario::Mario() {
     powerUp = LoadSound("sounds/powerUp.wav");
 
     Forward = { 1, 0 };
-    Position.x = 50;
+    Position.x = 0;
+    Position.x = 3700;
     Position.y = 415;
     speed = 5.0f;
     jump = 10.0f;
@@ -153,7 +154,7 @@ float timer = GetTime() - start_timer;
 	else if (timer > 0.6) {
 		DrawTexture(bigMario_sprite, Position.x, Position.y - 35, WHITE);
         	playedPoweredUp = true;
-     		}	
+     			}	
 		}
 	}
 

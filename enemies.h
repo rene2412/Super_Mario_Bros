@@ -20,9 +20,9 @@ class Enemies {
     public:
 	 Enemies() {}
 	 virtual ~Enemies() {}
-         Vector2 GetPosition() const { return Position; }
-	 Rectangle GetHitBox() const {
-   		 return Rectangle{ Position.x, Position.y, HitBox.width, HitBox.height };
+        Vector2 GetPosition() const { return Position; }
+	 	Rectangle GetHitBox() const {
+   		return Rectangle{ Position.x, Position.y, HitBox.width, HitBox.height };
 	}
 	 float GetSpeed() const { return speed; }
      float GetFrameSpeed() const { return frame_speed; }
@@ -45,6 +45,10 @@ class Enemies {
      virtual void Movement() {};
 	 virtual void Animations() {};
 	 virtual void Spawn() {};
+	//teach c++ how to print the Vector2 cordinates in one go
+	friend std::ostream& operator<<(std::ostream& os, const Vector2& vec) {
+		os << vec.x << ", " << vec.y << std::endl;
+	}
 };
 
 //Goomba inherits everything from Enemies
@@ -52,6 +56,9 @@ class Goomba : public Enemies {
     private:
 	static Image img, img2, img3, img4;
 	static Texture2D sprite, sprite1, sprite2, sprite3, sprite4;
+	bool IsFalling;
+	bool IsOnBricks;
+	bool IsOnQuestion;
 
     public:
 	 Goomba();
@@ -59,11 +66,19 @@ class Goomba : public Enemies {
 	 static void LoadTextures(); 
 	 static void FreeTextures();
 
+	 bool GetIsFalling() const { return IsFalling; }
+	 bool GetIsOnBricks() const { return IsOnBricks; }
+	 bool GetIsOnQuestion() const { return IsOnQuestion; }
+	 void SetIsFalling(bool f)  { IsFalling = f; }
+	 void SetIsOnBricks(bool b) { IsOnBricks = b; }
+	 void SetIsOnQuestion(bool q) { IsOnQuestion = q; }
+
 	 void Draw() override;
 	 void Animations() override;
 	 static void Spawn(std::vector<std::shared_ptr<Goomba>>& goomba); 
 	 void Update(Mario &mario);
 	 void Movement(Mario &mario);
+	 
 };
 
 extern std::vector<std::shared_ptr<Goomba>> goomba;

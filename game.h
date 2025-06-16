@@ -18,6 +18,7 @@ public:
     void DisableCoinAnimation(Mario &mario, MapAssets &map); 
     void HandleMushroomCollision(Mario &mario, MapAssets &map);
     void GoombaTubeCollision(std::vector<std::shared_ptr<Goomba>>& goombas, Rectangle rectangle);
+    void GoombaIsFallingDown(std::vector<std::shared_ptr<Goomba>> &goombas, MapAssets &map);
 };
 
 
