@@ -8,7 +8,7 @@ Texture2D Goomba::sprite, Goomba::sprite1, Goomba::sprite2, Goomba::sprite3, Goo
 std::vector<std::shared_ptr<Goomba>> goomba;
 
 Goomba::Goomba() {
-LoadTextures();
+LoadGoombaTextures();
    Position = {0, 0};
    speed = 1.5f;
    frameCounter = 0;
@@ -19,7 +19,7 @@ LoadTextures();
 }
 Goomba::~Goomba() {}
 
-void Goomba::LoadTextures() {
+void Goomba::LoadGoombaTextures() {
 img = LoadImage("images/goombaIdle.png");
 ImageResize(&img, 55, 40);
 sprite = LoadTextureFromImage(img);
@@ -39,10 +39,12 @@ img4 = LoadImage("images/goombaDeath.png");
 ImageResize(&img4, 55, 40);
 sprite4 = LoadTextureFromImage(img4);
 UnloadImage(img4);
+
 }
 
 
-void Goomba::FreeTextures() {
+void Goomba::FreeGoombaTextures() {
+	std::cout << "called???\n"; 
    UnloadTexture(sprite);
    UnloadTexture(sprite2);
    UnloadTexture(sprite3);
@@ -104,5 +106,73 @@ void Goomba::Movement(Mario &mario)  {
 		}
 		if (distance > 250) { 
 			IsMoving = false;
+	}
+}
+
+Koopa::Koopa() {
+  LoadTextures();
+  Position = {5110, 415};
+  speed = 1.5f;
+  frameCounter = 0;
+  IsMoving = false;
+  IsAlive = true;
+  IsDamageValid = true;
+  HitBox = { Position.x, Position.y, 55, 40 };
+}
+
+Koopa::~Koopa() {
+	FreeTextures();
+}
+
+void Koopa::LoadTextures() {
+img = LoadImage("images/koopaIdle.png");
+ImageResize(&img, 80, 70);
+sprite = LoadTextureFromImage(img);
+UnloadImage(img);
+
+img2 = LoadImage("images/koopaLeft.png");
+ImageResize(&img2, 80, 70);
+sprite1 = LoadTextureFromImage(img2);
+UnloadImage(img2);
+}
+
+void Koopa::FreeTextures() {
+	UnloadTexture(sprite);
+	UnloadTexture(sprite1);
+}
+
+void Koopa::Update(Mario &mario) {
+	Draw();
+	Movement(mario);
+	Animations();
+}
+
+void Koopa::Draw() {
+	if (IsAlive) {
+		DrawTexture(sprite, Position.x, Position.y, WHITE);
+	}
+}
+
+void Koopa::Animations() {
+	if (IsMoving and IsAlive) {
+		frameCounter ++;
+		if ((frameCounter / switchRate) % 2 == 0) {	
+			 DrawTexture(sprite, Position.x, Position.y, WHITE);
+		 }
+		else DrawTexture(sprite1, Position.x, Position.y, WHITE);
+	}
+	if (!IsAlive) {
+
+	}
+}
+
+void Koopa::Movement(Mario &mario) {
+	 float Distance =  Position.x - mario.GetPosition().x;
+	if (Distance <= 500) {
+		IsMoving = true;
+		Position.x -= speed;	
+	}
+	if (Distance > 500) {
+		IsMoving = false;
 	}
 }

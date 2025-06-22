@@ -9,6 +9,7 @@ public:
     Game();
     void Collisions(Mario &mario, std::vector<std::shared_ptr<Goomba>>& goombas, MapAssets &map);
     void HandleGoombaCollision(Mario &mario, Goomba& goomba);
+    void HandleKoopaCollision(Mario &mario, Koopa& koopa);
     void HandleTubeCollision(Mario &mario, Rectangle tubeHitbox, float padding); 
     void FallFromAsset(Mario &mario);
     void HandleBrickCollision(Mario &mario, MapAssets &map);

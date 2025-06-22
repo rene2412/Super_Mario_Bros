@@ -66,6 +66,12 @@ void Game::Collisions(Mario &mario, std::vector<std::shared_ptr<Goomba>>& goomba
 
 }
 
+void Game::HandleKoopaCollision(Mario &mario, Koopa& koopa) {
+	if (CheckCollisionRecs(mario.GetHitBox(), koopa.GetHitBox())) {
+		
+	}
+}
+
 void Game::GoombaIsFallingDown(std::vector<std::shared_ptr<Goomba>> &goombas, MapAssets &map) {
 	goombas[4]->SetIsOnBricks(false);
 	goombas[4]->SetIsOnQuestion(false);

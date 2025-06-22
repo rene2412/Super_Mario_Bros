@@ -87,7 +87,18 @@ MapAssets::MapAssets() : removeQuestionBricks(4, true), hasQuestionPassed(4, fal
     }
     AddHardBrick(4450, 110, hardbrick.width, hardbrick.height); 
     AddHardBrick(4495, 110, hardbrick.width, hardbrick.height); 
+    AddHardBrick(4800, 260, hardbrick.width, hardbrick.height); 
+    AddHardBrick(4845, 260, hardbrick.width, hardbrick.height); 
+    AddHardBrick(5800, 260, hardbrick.width, hardbrick.height); 
+    AddHardBrick(5950, 110, hardbrick.width, hardbrick.height); 
+    AddHardBrick(5995, 110, hardbrick.width, hardbrick.height); 
+    AddHardBrick(6040, 110, hardbrick.width, hardbrick.height); 
+    AddHardBrick(6250, 110, hardbrick.width, hardbrick.height); 
+    AddHardBrick(6295, 260, hardbrick.width, hardbrick.height); 
+    AddHardBrick(6340, 260, hardbrick.width, hardbrick.height); 
+    AddHardBrick(6385, 110, hardbrick.width, hardbrick.height); 
     
+
     AddQuestionBrick(330, 250, question.width, question.height);
     posX = 580;
     for (int i = 0; i < 2; i++) {
@@ -98,6 +109,10 @@ MapAssets::MapAssets() : removeQuestionBricks(4, true), hasQuestionPassed(4, fal
     AddQuestionBrick(3745, 260, question.width, question.height); 
     AddQuestionBrick(4540, 110, question.width, question.height); 
     AddQuestionBrick(4540, 260, question.width, question.height); 
+    AddQuestionBrick(5100, 260, question.width, question.height); 
+    AddQuestionBrick(5300, 260, question.width, question.height); 
+    AddQuestionBrick(5300, 110, question.width, question.height); 
+    AddQuestionBrick(5500, 260, question.width, question.height); 
 
     float width = stairs.width;
     float height = stairs.height;
@@ -162,7 +177,7 @@ void MapAssets::Draw(Mario &mario) {
     y = 599;
      for (int cols = 0; cols < 3; cols++) {
         y -= brick.height; // Move up for each row
-        for (int rows = 0; rows < 40; rows++) {
+        for (int rows = 0; rows < 80; rows++) {
 	     DrawTexture(brick, x, y, WHITE);
             x += brick.width; // Move right for each row
         }
@@ -176,7 +191,7 @@ void MapAssets::Draw(Mario &mario) {
     DrawTexture(hill, 2200, 402, WHITE);
     DrawTexture(hill, 2900, 402, WHITE);
     DrawTexture(hill, 3140, 402, WHITE);
-    DrawTexture(hill, 3480, 402, WHITE);
+    DrawTexture(hill, 3500, 402, WHITE);
     //this is the first question block brick
     if(removeQuestionBricks[0] == true) {
 	    DrawTexture(question, 330, 250, WHITE);
@@ -207,9 +222,30 @@ void MapAssets::Draw(Mario &mario) {
 	 }
    	 DrawTexture(hardbrick, 4450, 110, WHITE);
    	 DrawTexture(hardbrick, 4495, 110, WHITE);
-   	 DrawTexture(question, 4540, 110, WHITE);
+   	 
+     DrawTexture(question, 4540, 110, WHITE);
    	 DrawTexture(question, 4540, 260, WHITE);
 	 
+   	 DrawTexture(hardbrick, 4800, 260, WHITE);
+   	 DrawTexture(hardbrick, 4845, 260, WHITE);
+
+   	 DrawTexture(question, 5100, 260, WHITE);
+   	 DrawTexture(question, 5300, 260, WHITE);
+   	 DrawTexture(question, 5300, 110, WHITE);
+   	 DrawTexture(question, 5500, 260, WHITE);
+     
+   	 DrawTexture(hardbrick, 5800, 260, WHITE);
+   	 DrawTexture(hardbrick, 5950, 110, WHITE);
+   	 DrawTexture(hardbrick, 5995, 110, WHITE);
+   	 DrawTexture(hardbrick, 6040, 110, WHITE);
+
+   	 DrawTexture(hardbrick, 6250, 110, WHITE);
+   	 DrawTexture(question, 6295, 110, WHITE);
+   	 DrawTexture(question, 6340, 110, WHITE);
+   	 DrawTexture(hardbrick, 6385, 110, WHITE);
+   	 DrawTexture(hardbrick, 6295, 260, WHITE);
+   	 DrawTexture(hardbrick, 6340, 260, WHITE);
+
 	 posX = 200;
     for (int i = 0; i < 23; i++) {
    	 DrawTexture(cloud, posX, -60, WHITE);

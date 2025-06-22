@@ -17,6 +17,7 @@ int main() {
   SetTraceLogLevel(LOG_WARNING);
   Game game;
   Mario mario;
+  Koopa koopa;
   MapAssets map;
   std::vector<std::shared_ptr<Goomba>> goombas;
   Goomba::Spawn(goombas);
@@ -34,6 +35,7 @@ int main() {
 		g->Draw();
 		g->Update(mario);
 	}
+        koopa.Update(mario);
 	EndMode2D();
 	EndBlendMode();
 	EndDrawing();
