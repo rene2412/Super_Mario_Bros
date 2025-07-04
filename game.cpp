@@ -1,8 +1,12 @@
 #include "game.h"
 #include <iostream>
 #include <cmath>
+#include <algorithm>
 
-Game::Game() {}
+Game::Game() {
+ coin_audio = LoadSound("sounds/coins.wav");
+
+}
   
 void Game::Collisions(Mario &mario, std::vector<std::shared_ptr<Goomba>>& goombas, MapAssets &map) {
    int i = 0; 
@@ -45,6 +49,10 @@ void Game::Collisions(Mario &mario, std::vector<std::shared_ptr<Goomba>>& goomba
         HandleTubeCollision(mario, map.GetTube4(), 4);
         onAnyAsset = true;
     }
+if (CheckCollisionRecs(mario.GetHitBox(), map.GetTube5())) {
+        HandleTubeCollision(mario, map.GetTube5(), 3);
+        onAnyAsset = true;
+    }
 
  // GoombaTubeCollision(goombas, map.GetTube2());
     // If Mario was on an asset but now isn't on any asset, handle falling
@@ -68,7 +76,7 @@ void Game::Collisions(Mario &mario, std::vector<std::shared_ptr<Goomba>>& goomba
 
 void Game::HandleKoopaCollision(Mario &mario, Koopa& koopa) {
 	if (CheckCollisionRecs(mario.GetHitBox(), koopa.GetHitBox())) {
-		
+		mario.SetIsAlive(false);	
 	}
 }
 
@@ -146,7 +154,7 @@ void Game::DisableCoinAnimation(Mario &mario, MapAssets &map) {
 			//if we already hit a coin dont recalcuate since mario cant hit the same coin twice
 			// if (i == 1) continue;
 			 map.SetHaveCoinsPassed(map.GetHasQuestionPassed()[i], i);
-			 std::cout << "i: " << map.GetHaveCoinsPassed()[i] << std::endl;
+		//	 std::cout << "i: " << map.GetHaveCoinsPassed()[i] << std::endl;
 		}
 	}
 }
@@ -181,8 +189,13 @@ void Game::OnTopOfBricks(Mario &mario, MapAssets &map) {
 }
 
 void Game::HandleStairCollision(Mario &mario, MapAssets &map) {
+	std::vector<bool> allStairs(map.GetStairs().size(), false);
 	// for every stair check if mario is colliding with it
+	int i = 0;
 	for (auto &stair : map.GetStairs()) {
+	    bool stairs = CheckCollisionRecs(mario.GetHitBox(), stair);
+		std::cout << "STAIRS: " << stairs << std::endl;
+		allStairs.push_back(stairs);
 		if (CheckCollisionRecs(mario.GetHitBox(), stair) and mario.GetForwardVector().x == 1 and IsKeyDown(KEY_RIGHT)) {
 			// calculate the slope angle mario needs to travel at for upstairs and then downstairs
 			Vector2 anglePos = mario.GetPosition();
@@ -197,12 +210,16 @@ void Game::HandleStairCollision(Mario &mario, MapAssets &map) {
 			float rads = 80.0f * (PI / 180.0f);
 		       	anglePos.x -= 0.3 * cos(rads);
 		       	anglePos.y += 0.4 * sin(rads);
-			mario.SetPosition({anglePos.x, anglePos.y});
+			    mario.SetPosition({anglePos.x, anglePos.y});
 		}
-		if (mario.GetIsOnStairs() and mario.GetPosition().y >= 415) {
-			mario.SetIsOnStairs(false);
-		}
+		i++;
 	}
+	if (mario.GetIsOnStairs() and std::all_of(allStairs.begin(), allStairs.end(), [](bool x) { return x == 0; })) {
+	    	mario.SetIsOnStairs(false);
+     		mario.SetIsOnAsset(true);
+			FallFromAsset(mario);
+			
+	} 
 }
 
 void Game::HandleQuestionCollision(Mario &mario, MapAssets &map) {
@@ -211,11 +228,12 @@ void Game::HandleQuestionCollision(Mario &mario, MapAssets &map) {
 		//std::cout << "B: " << map.GetQuestionBrick().size() << std::endl;
 		if (i != 1 and CheckCollisionRecs(mario.GetHitBox(), brick)) {
 			std::cout << "question hit\n";
+			PlaySound(coin_audio);
 			mario.SetIsOnAsset(true);
 			FallFromAsset(mario);
 			map.SetRemoveQuestionBricks(false, i);
+			return;
 			if (i == 0) {
-			std::cout << "MESSI\n";
 			map.SetHasQuestionPassed(true, i);
 			map.SetQuestionIndex(i);
 			map.SetShowCoin(true, 0); 
@@ -223,7 +241,6 @@ void Game::HandleQuestionCollision(Mario &mario, MapAssets &map) {
 			break;
 			}
 			if (i == 2) {
-			std::cout << "TOP\n";
 			map.SetHasQuestionPassed(true, i);
 			map.SetQuestionIndex(i);
 			map.SetShowCoin(true, 2); 
@@ -231,7 +248,6 @@ void Game::HandleQuestionCollision(Mario &mario, MapAssets &map) {
 			break;
 			}
 			if (i == 3) {	
-			std::cout << "HAMAS\n";
 			map.SetHasQuestionPassed(true, i);
 			map.SetQuestionIndex(i);
 			map.SetShowCoin(true, 1); 
@@ -239,7 +255,6 @@ void Game::HandleQuestionCollision(Mario &mario, MapAssets &map) {
 			break;
 			}
 			if (i == 4) {	
-			std::cout << "here\n";
 			map.SetHasQuestionPassed(true, i);
 			map.SetQuestionIndex(i);
 			map.SetShowCoin(true, 3); 
@@ -247,23 +262,41 @@ void Game::HandleQuestionCollision(Mario &mario, MapAssets &map) {
 			break;
 			}
 			if (i == 6) {	
-			std::cout << "yo\n";
 			map.SetHasQuestionPassed(true, i);
 			map.SetQuestionIndex(i);
 			map.SetShowCoin(true, 4); 
 			map.SetCoinTimer(0.0f, 4);
 			break;
 			}
-			/*
-			if (i == 6) {	
-			std::cout << "yo\n";
+			if (i == 7) {	
 			map.SetHasQuestionPassed(true, i);
 			map.SetQuestionIndex(i);
 			map.SetShowCoin(true, 5); 
 			map.SetCoinTimer(0.0f, 5);
 			break;
+			}	
+			if (i == 8) {	
+			map.SetHasQuestionPassed(true, i);
+			map.SetQuestionIndex(i);
+			map.SetShowCoin(true, 6); 
+			map.SetCoinTimer(0.0f, 6);
+			break;
 			}
-			*/
+			if (i == 9) {	
+			map.SetHasQuestionPassed(true, i);
+			map.SetQuestionIndex(i);
+			map.SetShowCoin(true, 7); 
+			map.SetCoinTimer(0.0f, 7);
+			break;
+			}
+			if (i == 10) {	
+			map.SetHasQuestionPassed(true, i);
+			map.SetQuestionIndex(i);
+			map.SetShowCoin(true, 8); 
+			map.SetCoinTimer(0.0f, 8);
+			break;
+			}
+
 
 		}
 		if (i == 1 and CheckCollisionRecs(mario.GetHitBox(), brick)) {

@@ -29,7 +29,7 @@ MapAssets::MapAssets() : removeQuestionBricks(4, true), hasQuestionPassed(4, fal
     Image img5 = LoadImage("images/cloud.png");
     ImageFormat(&img5, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8); 
     std::cout << "Image format: " << img5.format << std::endl;
-    ImageResize(&img5, img5.width / 3, img5.height / 3);
+    ImageResize(&img5, img5.width, img5.height);
     cloud = LoadTextureFromImage(img5);
     UnloadImage(img5);
 
@@ -37,6 +37,8 @@ MapAssets::MapAssets() : removeQuestionBricks(4, true), hasQuestionPassed(4, fal
     ImageResize(&img6, img6.width / 3 , img6.height / 2);
     hitbox_tube = {880, 293, float(img6.width), float(img6.height) }; //this code is from the future spookyyyyyyyy
     tube = LoadTextureFromImage(img6);
+    hitbox_tube5 = {7600, 282, float(img6.width), float(img6.height)};
+    tube5 = LoadTextureFromImage(img6);
     UnloadImage(img6);
 
     Image img7 = LoadImage("images/mushroom.png");
@@ -70,6 +72,17 @@ MapAssets::MapAssets() : removeQuestionBricks(4, true), hasQuestionPassed(4, fal
     ImageResize(&img11, img11.width / 2, img11.height / 2);
     completedBrick = LoadTextureFromImage(img11);
     UnloadImage(img11);
+
+    Image img12 = LoadImage("images/flag.png");
+    ImageResize(&img12, img12.width, img12.height - 15);
+    pole = LoadTextureFromImage(img12);
+    UnloadImage(img12);
+
+    Image img13 = LoadImage("images/castle.png");
+    ImageResize(&img13, img13.width / 3, img13.height / 3);
+    castle = LoadTextureFromImage(img13);
+    UnloadImage(img13);
+
     questionIndex = -1;
     //load in the collision hit boxed for the bricks 
     int posX = 530;
@@ -97,6 +110,9 @@ MapAssets::MapAssets() : removeQuestionBricks(4, true), hasQuestionPassed(4, fal
     AddHardBrick(6295, 260, hardbrick.width, hardbrick.height); 
     AddHardBrick(6340, 260, hardbrick.width, hardbrick.height); 
     AddHardBrick(6385, 110, hardbrick.width, hardbrick.height); 
+    AddHardBrick(7900, 260, hardbrick.width, hardbrick.height); 
+    AddHardBrick(7945, 260, hardbrick.width, hardbrick.height); 
+    AddHardBrick(8035, 260, hardbrick.width, hardbrick.height); 
     
 
     AddQuestionBrick(330, 250, question.width, question.height);
@@ -105,6 +121,7 @@ MapAssets::MapAssets() : removeQuestionBricks(4, true), hasQuestionPassed(4, fal
     	AddQuestionBrick(posX, 250, question.width, question.height); 
 	 posX += 100;
     }
+
     AddQuestionBrick(630, 100, question.width, question.height); 
     AddQuestionBrick(3745, 260, question.width, question.height); 
     AddQuestionBrick(4540, 110, question.width, question.height); 
@@ -113,13 +130,13 @@ MapAssets::MapAssets() : removeQuestionBricks(4, true), hasQuestionPassed(4, fal
     AddQuestionBrick(5300, 260, question.width, question.height); 
     AddQuestionBrick(5300, 110, question.width, question.height); 
     AddQuestionBrick(5500, 260, question.width, question.height); 
+    AddQuestionBrick(7990, 260, question.width, question.height); 
 
     float width = stairs.width;
     float height = stairs.height;
-    float startingX = 1160;
+    float startingX = 6500;
     float startingY = 452;
 
-   /*
    for (int row = 0; row < 4; row++) {
 	      int x = startingX + (width * row);
 	      int y = startingY - (height * row); 
@@ -128,20 +145,56 @@ MapAssets::MapAssets() : removeQuestionBricks(4, true), hasQuestionPassed(4, fal
 		    x += width;
 	  	}
 	}
-	*/
+	
+    startingX = 6720;
+    startingY = 452;
+    for (int row = 0; row < 4; row++) {
+	     int x = startingX;
+         int y = startingY - (height * row); 
+         for (int col = 0; col < 4 - row; col++) {
+		   AddStairs(x,y, width, height);
+           x += width;
+        }
+    }
+    startingX = 7000;
+    startingY = 452; 
+ for (int row = 0; row < 4; row++) {
+	      int x = startingX + (width * row);
+	      int y = startingY - (height * row); 
+	  for (int col = 0; col < 5 - row; col++) {
+		   AddStairs(x,y, width, height);
+		   x += width;
+	  	}
+	}
+    
+    startingX = 8500;
+    startingY = 452; 
+    for (int row = 0; row < 8; row++) {
+	      int x = startingX + (width * row);
+	      int y = startingY - (height * row); 
+	  for (int col = 0; col < 9 - row; col++) {
+		   AddStairs(x,y, width, height);
+		   x += width;
+	  	}
+	}
+
     hasQuestionPassed.resize(question_bricks.size(), false);
-    haveCoinsPassed.resize(5, false);
+    haveCoinsPassed.resize(9, false);
 
     allCoinPositions = {
-    	{330, 250},
+    {330, 250},
 	{680, 100},
 	{680, 250},
 	{3745, 250},
-	{4540, 250}
+	{4540, 250},
+    {5100, 260},
+    {5300, 260},
+    {5300, 110},
+    {5500, 260},
     };
 
-    showCoin = {false, false, false, false, false};
-    coinTimer = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
+    showCoin = {false, false, false, false, false, false, false, false, false};
+    coinTimer = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
 }
 
 // Destructor: Unloads textures when the object is destroyed
@@ -177,13 +230,23 @@ void MapAssets::Draw(Mario &mario) {
     y = 599;
      for (int cols = 0; cols < 3; cols++) {
         y -= brick.height; // Move up for each row
-        for (int rows = 0; rows < 80; rows++) {
+        for (int rows = 0; rows < 71; rows++) {
 	     DrawTexture(brick, x, y, WHITE);
             x += brick.width; // Move right for each row
         }
         x = 4400;
      }
 
+    x = 7250;
+    y = 599;
+     for (int cols = 0; cols < 3; cols++) {
+        y -= brick.height; // Move up for each row
+        for (int rows = 0; rows < 70; rows++) {
+	     DrawTexture(brick, x, y, WHITE);
+            x += brick.width; // Move right for each row
+        }
+        x = 7250;
+     }
 
     DrawTexture(hill, 230, 402, WHITE);
     DrawTexture(hill, 765, 402, WHITE);
@@ -245,22 +308,29 @@ void MapAssets::Draw(Mario &mario) {
    	 DrawTexture(hardbrick, 6385, 110, WHITE);
    	 DrawTexture(hardbrick, 6295, 260, WHITE);
    	 DrawTexture(hardbrick, 6340, 260, WHITE);
-
-	 posX = 200;
+   	 DrawTexture(hardbrick, 7900, 260, WHITE);
+   	 DrawTexture(hardbrick, 7945, 260, WHITE);
+   	 DrawTexture(question, 7990, 260, WHITE);
+   	 DrawTexture(hardbrick, 8035, 260, WHITE);
+    DrawTexture(pole, 9000, 180, WHITE);
+	 posX = 0;
     for (int i = 0; i < 23; i++) {
-   	 DrawTexture(cloud, posX, -60, WHITE);
-    	 posX += 250;
-    }
+   	 DrawTexture(cloud, posX, -150, WHITE);
+    	 posX += 550;
+         }
+        
    	 DrawTexture(tube, 880, 283, WHITE);
    	 DrawTexture(tube2, 1500, 180, WHITE);
    	 DrawTexture(tube3, 2000, 180, WHITE);
    	 DrawTexture(tube4, 2600, 180, WHITE);
+   	 DrawTexture(tube5, 7600, 282, WHITE);
 	 CoinAnimation();
-	//DrawStairs();
+	 DrawStairs();
 	 if (GetMushroomCollided()) {
 		 MushroomAnimation(mario);
 	     }	
 	 CompletedBrick();
+     DrawTexture(castle, 9500, 83 ,WHITE);
 }
 
 static bool beginning = true;
@@ -308,18 +378,27 @@ void MapAssets::CompletedBrick() {
 	if ( hasQuestionPassed[6] == true) { 
 		DrawTexture(completedBrick, 4540, 260, WHITE);
 	}
-
+    if ( hasQuestionPassed[7] == true) { 
+		DrawTexture(completedBrick, 5100, 260, WHITE);
+	}
+    if ( hasQuestionPassed[8] == true) { 
+		DrawTexture(completedBrick, 5300, 260, WHITE);
+	}
+    if ( hasQuestionPassed[9] == true) { 
+		DrawTexture(completedBrick, 5300, 110, WHITE);
+	}
+     if ( hasQuestionPassed[10] == true) { 
+		DrawTexture(completedBrick, 5500, 260, WHITE);
+	}
 }
 
-void MapAssets::CoinAnimation() {
-	//std::cout << "SIZE: " << haveCoinsPassed.size() << std::endl;
-		for (size_t i = 0; i < haveCoinsPassed.size(); i++) {
-			//std::cout << "Show Coin: " << i << " - " << showCoin[i] << " | " << "Have Coins Possed: " << i << " - " << haveCoinsPassed[i] << std::endl; 
+void MapAssets::CoinAnimation() {         
+        for (size_t i = 0; i < haveCoinsPassed.size(); i++) {
        		   if (showCoin[i] and haveCoinsPassed[i] == false) { 
 	 		//std::cout  << "Drawing coin : " << i << " | " << allCoinPositions[i].x << ", " << allCoinPositions[i].y << "\n";
 			allCoinPositions[i].y -= 4;
 		   	DrawTexture(coin, allCoinPositions[i].x, allCoinPositions[i].y, WHITE);
-		        coinTimer[i] += GetFrameTime(); 
+                coinTimer[i] += GetFrameTime(); 
   		        if (coinTimer[i] >= 0.4f) {
     		       	   showCoin[i] = false;
 		           coinTimer[i] = 0.0f; 
@@ -332,13 +411,55 @@ void MapAssets::CoinAnimation() {
 void MapAssets::DrawStairs() {
    float width = stairs.width;
    float height = stairs.height;
-   float startingX = 1160;
+   float startingX = 6500;
    float startingY = 452;
 
    for (int row = 0; row < 4; row++) {
 	      int x = startingX + (width * row);
 	      int y = startingY - (height * row); 
 	  for (int col = 0; col < 4 - row; col++) {
+		   DrawTexture(stairs, x, y, WHITE);
+		   x += width;
+	  	}
+	}
+    startingX = 6720;
+    startingY = 452;
+    for (int row = 0; row < 4; row++) {
+         //int x = startingX + (width * row);
+	     int x = startingX;
+         int y = startingY - (height * row); 
+         for (int col = 0; col < 4 - row; col++) {
+		   DrawTexture(stairs, x, y, WHITE);
+		   x += width;
+        }
+    }
+    
+    startingX = 7010;
+    startingY = 452; 
+ for (int row = 0; row < 4; row++) {
+	      int x = startingX + (width * row);
+	      int y = startingY - (height * row); 
+	  for (int col = 0; col < 5 - row; col++) {
+		   DrawTexture(stairs, x, y, WHITE);
+		   x += width;
+	  	}
+	}
+    startingX = 7250;
+    startingY = 452; 
+ for (int row = 0; row < 4; row++) {
+	      int x = startingX;
+	      int y = startingY - (height * row); 
+	  for (int col = 0; col < 4 - row; col++) {
+		   DrawTexture(stairs, x, y, WHITE);
+		   x += width;
+	  	}
+	}
+    startingX = 8500;
+    startingY = 452; 
+    for (int row = 0; row < 8; row++) {
+	      int x = startingX + (width * row);
+	      int y = startingY - (height * row); 
+	  for (int col = 0; col < 9 - row; col++) {
 		   DrawTexture(stairs, x, y, WHITE);
 		   x += width;
 	  	}

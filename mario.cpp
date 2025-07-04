@@ -77,10 +77,9 @@ Mario::Mario() {
     UnloadImage(marioDeath_img);
 
     powerUp = LoadSound("sounds/powerUp.wav");
-
     Forward = { 1, 0 };
     Position.x = 0;
-    Position.x = 3700;
+    //Position.x = 9200;
     Position.y = 415;
     speed = 5.0f;
     jump = 10.0f;
@@ -122,6 +121,7 @@ Mario::~Mario() {
     UnloadTexture(bigMarioJumpLeft_sprite);
     UnloadTexture(marioDeath_sprite);
     UnloadTexture(marioPowerUp_sprite);
+    UnloadSound(powerUp);
 }
 
 Camera2D& Mario::GetCamera() {

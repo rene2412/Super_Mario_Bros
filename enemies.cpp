@@ -44,7 +44,6 @@ UnloadImage(img4);
 
 
 void Goomba::FreeGoombaTextures() {
-	std::cout << "called???\n"; 
    UnloadTexture(sprite);
    UnloadTexture(sprite2);
    UnloadTexture(sprite3);
@@ -52,8 +51,8 @@ void Goomba::FreeGoombaTextures() {
 }
 
 void Goomba::Spawn(std::vector<std::shared_ptr<Goomba>>& goomba) {
-    std::vector<float> positionsX = { 500, 1680, 2400, 2500, 3850, 3920};
-    std::vector<float> positionsY = { 446, 446, 446, 446, 72, 72 };
+    std::vector<float> positionsX = { 500, 1680, 2400, 2500, 3850, 3920, 4790, 4850, 5730, 5800, 6250, 6320, 8200, 8250};
+    std::vector<float> positionsY = { 446, 446, 446, 446, 72, 72, 446, 446, 446, 446, 446, 446, 446, 446};
 	int N = positionsX.size();
 	for (int i = 0; i < N; i++) {
 	//shared smart pointer since all goombas do the same thing
@@ -98,7 +97,7 @@ void Goomba::Animations() {
 
 void Goomba::Movement(Mario &mario)  {
 	float distance = Position.x - mario.GetPosition().x;
-		if (distance <= 100 and IsAlive) {
+		if (distance <= 500 and IsAlive) {
 	        IsMoving = true;
 		Position.x -= GetSpeed();
 		HitBox.x = Position.x;

@@ -8,9 +8,10 @@ class Mario;
 
 class MapAssets {
 private:
-    Texture2D brick, hill, question, tube, tube2, tube3, tube4, hardbrick, cloud, mushroom, stairs, coin, completedBrick;
-    Rectangle hitbox_tube, hitbox_tube2, hitbox_tube3, hitbox_tube4, hitbox_tube5, hitbox_tube6, hitbox_mushroom;
+    Texture2D brick, hill, question, tube, tube2, tube3, tube4, tube5, hardbrick, cloud, mushroom, stairs, coin, completedBrick, pole, castle;
+    Rectangle hitbox_tube, hitbox_tube2, hitbox_tube3, hitbox_tube4, hitbox_tube5, hitbox_mushroom;
     Vector2 MushroomPos;
+
 
     void LoadTextures();   // Load textures once
     void UnloadTextures(); // Unload textures when donere 
@@ -77,7 +78,6 @@ public:
     Rectangle GetTube3() const { return hitbox_tube3; }
     Rectangle GetTube4() const { return hitbox_tube4; }
     Rectangle GetTube5() const { return hitbox_tube5; }
-    Rectangle GetTube6() const { return hitbox_tube6; }
     
     const std::vector<Rectangle> &GetHardBrick() const { return hitbox_hardbricks; }
     const std::vector<Rectangle> &GetQuestionBrick() const { return question_bricks; }
@@ -86,8 +86,6 @@ public:
     void AddHardBrick(float posX, float posY, float width, float height) { hitbox_hardbricks.push_back({posX, posY, width, height}); }
     void AddQuestionBrick(float posX, float posY, float width, float height) { question_bricks.push_back({posX, posY, width, height}); }
     void AddStairs(float posX, float posY, float width, float height) { hitbox_stairs.push_back({posX, posY, width, height}); }
-
-
 
 };
 

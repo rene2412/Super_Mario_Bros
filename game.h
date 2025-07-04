@@ -4,7 +4,8 @@
 #include "load_map.h"
 
 class Game {
-
+    private:
+    Sound coin_audio;
 public:
     Game();
     void Collisions(Mario &mario, std::vector<std::shared_ptr<Goomba>>& goombas, MapAssets &map);
