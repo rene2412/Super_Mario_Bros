@@ -10,7 +10,7 @@ private:
     bigMarioWalk_img, bigMarioWalkLeft_img, bigMarioWalkRight_img, bigMarioJumpRight_img, bigMarioJumpLeft_img, marioDeath_img;
     Texture2D sprite, left_idle_sprite, jump_sprite, jump_sprite_left, right_sprite, left_sprite, marioPowerUp_sprite, bigMario_sprite, bigMarioLeft_sprite,
     bigMarioWalk_sprite, bigMarioWalkRight_sprite, bigMarioWalkLeft_sprite, bigMarioJumpRight_sprite, bigMarioJumpLeft_sprite, marioDeath_sprite;
-    Sound powerUp;
+    Sound powerUp, jumpSound;
     Vector2 Position;
     Vector2 Forward;
     Rectangle hitbox;

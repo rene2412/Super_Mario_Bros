@@ -5,7 +5,7 @@
 
 class Game {
     private:
-    Sound coin_audio;
+    Sound SuperMarioBros;
 public:
     Game();
     void Collisions(Mario &mario, std::vector<std::shared_ptr<Goomba>>& goombas, MapAssets &map);

@@ -82,7 +82,9 @@ MapAssets::MapAssets() : removeQuestionBricks(4, true), hasQuestionPassed(4, fal
     ImageResize(&img13, img13.width / 3, img13.height / 3);
     castle = LoadTextureFromImage(img13);
     UnloadImage(img13);
-
+    
+    coin_audio = LoadSound("sounds/coins.wav");
+    
     questionIndex = -1;
     //load in the collision hit boxed for the bricks 
     int posX = 530;
@@ -396,16 +398,19 @@ void MapAssets::CoinAnimation() {
         for (size_t i = 0; i < haveCoinsPassed.size(); i++) {
        		   if (showCoin[i] and haveCoinsPassed[i] == false) { 
 	 		//std::cout  << "Drawing coin : " << i << " | " << allCoinPositions[i].x << ", " << allCoinPositions[i].y << "\n";
-			allCoinPositions[i].y -= 4;
+			//PlaySound(coin_audio);
+            if (coinTimer[i] == 0.0f) {
+                PlaySound(coin_audio);
+            }
+            allCoinPositions[i].y -= 4;
 		   	DrawTexture(coin, allCoinPositions[i].x, allCoinPositions[i].y, WHITE);
                 coinTimer[i] += GetFrameTime(); 
   		        if (coinTimer[i] >= 0.4f) {
     		       	   showCoin[i] = false;
 		           coinTimer[i] = 0.0f; 
-     			 }
-			      
-		}
-	}
+     		    }
+		   }
+	   }
 }
 
 void MapAssets::DrawStairs() {

@@ -97,7 +97,7 @@ void Goomba::Animations() {
 
 void Goomba::Movement(Mario &mario)  {
 	float distance = Position.x - mario.GetPosition().x;
-		if (distance <= 500 and IsAlive) {
+		if (distance <= 800 and IsAlive) {
 	        IsMoving = true;
 		Position.x -= GetSpeed();
 		HitBox.x = Position.x;

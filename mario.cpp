@@ -77,6 +77,8 @@ Mario::Mario() {
     UnloadImage(marioDeath_img);
 
     powerUp = LoadSound("sounds/powerUp.wav");
+    jumpSound = LoadSound("sounds/jump.wav");
+
     Forward = { 1, 0 };
     Position.x = 0;
     //Position.x = 9200;
@@ -122,6 +124,7 @@ Mario::~Mario() {
     UnloadTexture(marioDeath_sprite);
     UnloadTexture(marioPowerUp_sprite);
     UnloadSound(powerUp);
+    UnloadSound(jumpSound);
 }
 
 Camera2D& Mario::GetCamera() {
@@ -144,7 +147,6 @@ float timer = GetTime() - start_timer;
 	if (timer <= 0.2) {
   	//play the base sprite for 0.2s
    	PlaySound(powerUp);
-	std::cout << "playing sound\n";
 		DrawTexture(sprite, Position.x, Position.y, WHITE);
 			
 	}
@@ -266,6 +268,7 @@ void Mario::Movement() {
    }
     //need to add air physics
     if (IsKeyDown(KEY_SPACE) and !IsJumping) {
+        PlaySound(jumpSound);
 	    IsJumping = true;
 	    IsFalling = false;
 	    override_left_animation = false;

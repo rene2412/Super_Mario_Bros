@@ -4,14 +4,13 @@
 #include <algorithm>
 
 Game::Game() {
- coin_audio = LoadSound("sounds/coins.wav");
-
+SuperMarioBros = LoadSound("sounds/SuperMarioBros.wav");
+PlaySound(SuperMarioBros);
 }
   
 void Game::Collisions(Mario &mario, std::vector<std::shared_ptr<Goomba>>& goombas, MapAssets &map) {
    int i = 0; 
    for (auto g : goombas) {
-	  // std::cout << "Goomba: " << i << "(" << g->GetPosition().x << ", " << g->GetPosition().y << ")\n";  
 	   if (g->GetIsAlive()) {
 		HandleGoombaCollision(mario, *g);
 		if (i == 1 and g->GetHitBox().x <= map.GetTube2().x + map.GetTube().width) {
@@ -67,11 +66,6 @@ if (CheckCollisionRecs(mario.GetHitBox(), map.GetTube5())) {
   OnTopOfBricks(mario, map);
   DisableCoinAnimation(mario, map);
   GoombaIsFallingDown(goombas, map);
-  std::cout << mario.GetPosition().x << ", " << mario.GetPosition().y << std::endl;;	
-  //std::cout << mario.GetIsOnBricks() << std::endl; 
-  //std::cout << "Jumping: " << mario.GetIsJumping() << std::endl;
-  //std::cout << "Falling: " << mario.GetIsFalling() << std::endl;
-
 }
 
 void Game::HandleKoopaCollision(Mario &mario, Koopa& koopa) {
@@ -194,7 +188,6 @@ void Game::HandleStairCollision(Mario &mario, MapAssets &map) {
 	int i = 0;
 	for (auto &stair : map.GetStairs()) {
 	    bool stairs = CheckCollisionRecs(mario.GetHitBox(), stair);
-		std::cout << "STAIRS: " << stairs << std::endl;
 		allStairs.push_back(stairs);
 		if (CheckCollisionRecs(mario.GetHitBox(), stair) and mario.GetForwardVector().x == 1 and IsKeyDown(KEY_RIGHT)) {
 			// calculate the slope angle mario needs to travel at for upstairs and then downstairs
@@ -228,11 +221,9 @@ void Game::HandleQuestionCollision(Mario &mario, MapAssets &map) {
 		//std::cout << "B: " << map.GetQuestionBrick().size() << std::endl;
 		if (i != 1 and CheckCollisionRecs(mario.GetHitBox(), brick)) {
 			std::cout << "question hit\n";
-			PlaySound(coin_audio);
 			mario.SetIsOnAsset(true);
 			FallFromAsset(mario);
 			map.SetRemoveQuestionBricks(false, i);
-			return;
 			if (i == 0) {
 			map.SetHasQuestionPassed(true, i);
 			map.SetQuestionIndex(i);
