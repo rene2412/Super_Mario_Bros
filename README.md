@@ -6,12 +6,12 @@ How To Run The Program On Your Machine
 To run this make sure you have C++, Cmake, and Raylib installed on your machine.
 Once you clone the directory onto your machine run:
 
-cd SuperMarioBros/ 
-mkdir build
-cd build/
-cmake ..
-make
-cd ..
-./build/SuperMarioClone
+cd SuperMarioBros/ <br>
+mkdir build <br>
+cd build/ <br>
+cmake .. <br>
+make <br>
+cd .. <br>
+./build/SuperMarioClone <br>
 
-Enjoy
+Enjoy!
