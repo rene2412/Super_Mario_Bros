@@ -1,0 +1,10 @@
+# Build files
+*.o
+/build/
+main
+
+# IDE/editor files
+*.swp
+*.DS_Store
+.vscode/
+
