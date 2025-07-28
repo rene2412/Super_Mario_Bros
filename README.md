@@ -1,0 +1,1 @@
+This is a custom-built 2D platformer inspired by the original Super Mario Bros., written entirely in C++ using the Raylib graphics library. It features basic physics, collision detection, level loading from maps, and object-oriented design principles such as smart pointers, virtual functions, and encapsulation.
